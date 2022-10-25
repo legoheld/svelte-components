@@ -11,8 +11,8 @@
 
 common_publish:
   extends: .publish
-  only:
-    changes:
-      - "common/**/*"  
+  #only:
+  #  changes:
+  #    - "common/**/*"  
   before_script:
     cd common
