@@ -3,10 +3,9 @@
   image: node:16
   tags:
     - dind
-  script:
+  before_script:
     - npm set registry https://npm.lernetz.ch
     - echo '//npm.lernetz.ch/:_authToken=${NPM_TOKEN}'>.npmrc
-    - npm publish
 
 
 common_publish:
@@ -14,5 +13,5 @@ common_publish:
   #only:
   #  changes:
   #    - "common/**/*"  
-  before_script:
-    cd common
+  script:
+    npm -w common publish
