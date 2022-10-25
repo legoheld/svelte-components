@@ -1,0 +1,18 @@
+{
+  "name": "@lernetz/svelte-translate",
+  "version": "1.0.0",
+  "description": "A module to translate strings in different languages with support for variables and plurals. Its based on a svelte store to change the language on the fly.",
+  "main": "translate.ts",
+  "scripts": {
+    "test": "npx playwright test"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://gitlab.lernetz.ch/lfw/npm.git"
+  },
+  "dependencies": {
+    "svelte": "^3.0.0"
+  },
+  "author": "",
+  "license": "ISC"
+}

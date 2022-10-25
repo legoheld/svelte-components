@@ -1,0 +1,15 @@
+{
+  "name": "@lernetz/common",
+  "version": "1.0.0",
+  "description": "Some commonly used modules",
+  "main": "common.ts",
+  "scripts": {
+    "test": "npx playwright test"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://gitlab.lernetz.ch/lfw/npm.git"
+  },
+  "author": "",
+  "license": "ISC"
+}

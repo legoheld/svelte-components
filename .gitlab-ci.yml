@@ -1,0 +1,16 @@
+.publish:
+  stage: build
+  image: node:16
+  tags:
+    - dind
+  script:
+    - npm set registry https://npm.lernetz.ch
+    - echo '//npm.lernetz.ch/:_authToken=${NPM_TOKEN}'>.npmrc
+    - npm publish
+
+
+common_publish:
+  extends: .publish
+  only:
+    changes:
+      - "common/**/*"  
