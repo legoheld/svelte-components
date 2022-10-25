@@ -1,17 +1,25 @@
 .publish:
   stage: build
   image: node:16
+  needs: test
   tags:
     - dind
   before_script:
     - npm set registry https://npm.lernetz.ch
     - echo '//npm.lernetz.ch/:_authToken=${NPM_TOKEN}'>.npmrc
 
+test:
+  stage: test
+  image: mcr.microsoft.com/playwright:v1.27.0-focal
+  script:
+    npx playwright test
+
+
 
 common_publish:
   extends: .publish
-  #only:
-  #  changes:
-  #    - "common/**/*"  
+  only:
+    changes:
+      - "common/**/*"  
   script:
     npm -w common publish
