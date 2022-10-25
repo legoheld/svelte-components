@@ -13,8 +13,8 @@ test:
   stage: test
   image: mcr.microsoft.com/playwright:v1.27.0-focal
   script:
-    npm ci
-    npx playwright test
+    - npm ci
+    - npx playwright test
 
 
 
@@ -24,4 +24,4 @@ common_publish:
   #  changes:
   #    - "common/**/*"  
   script:
-    npm -w common publish
+    - npm -w common publish
