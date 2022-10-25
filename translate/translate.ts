@@ -4,7 +4,7 @@ import { derived, get, writable } from "svelte/store";
 export const locale = writable( "de" );
 
 
-
+// TEST publish
 const rangeSign = '...';
 const greaterSign = '+';
 const translations: KeyObject = {};
