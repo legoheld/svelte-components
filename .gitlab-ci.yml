@@ -20,8 +20,26 @@ test:
 
 common_publish:
   extends: .publish
-  #only:
-  #  changes:
-  #    - "common/**/*"  
+  only:
+    changes:
+      - "common/**/*"  
   script:
     - npm -w common publish
+
+
+translate_publish:
+  extends: .publish
+  only:
+    changes:
+      - "translate/**/*"  
+  script:
+    - npm -w translate publish
+
+
+routes_publish:
+  extends: .publish
+  only:
+    changes:
+      - "routes/**/*"  
+  script:
+    - npm -w routes publish
