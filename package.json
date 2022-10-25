@@ -14,7 +14,8 @@
   "license": "ISC",
   "workspaces": [
     "common",
-    "routes"
+    "routes",
+    "translate"
   ],
   "devDependencies": {
     "@playwright/test": "^1.27.1"
