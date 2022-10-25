@@ -13,7 +13,8 @@ test:
   stage: test
   image: mcr.microsoft.com/playwright:v1.27.0-focal
   script:
-    - npm install
+    - npm ci
+    - npm -w translate ci
     - npm run test
 
 
