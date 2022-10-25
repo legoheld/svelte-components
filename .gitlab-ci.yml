@@ -1,7 +1,8 @@
 .publish:
   stage: build
   image: node:16
-  needs: test
+  needs: 
+    - test
   tags:
     - dind
   before_script:
