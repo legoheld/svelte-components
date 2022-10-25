@@ -14,3 +14,5 @@ common_publish:
   only:
     changes:
       - "common/**/*"  
+  before_script:
+    cd common
