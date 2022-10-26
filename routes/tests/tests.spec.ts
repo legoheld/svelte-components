@@ -4,11 +4,12 @@ import { mapRoutes, Route } from '../routes';
 
 test.describe('Test routes', () => {
 
-    let routes:{path:Route, query:Route, settings:Route} = mapRoutes( {
+    let routes = mapRoutes<{path:Route, query:Route, settings:Route}>( {
         path: { url:'http://google.com/{one}/{two}/{three}' },
         query: { url:'http://google.com?q={query}'},
         settings: { url:'http://google.com', method:"POST", headers:{ MyHeader:"Peng" } }
     } );
+
 
 
     test('variable substitution', ({}) => {

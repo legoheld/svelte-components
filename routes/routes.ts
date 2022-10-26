@@ -1,6 +1,6 @@
 import {depthFirst, interpolate} from "@lernetz/common";
 
-export function mapRoutes( data ) {
+export function mapRoutes<G = {[key:string]:Route}>( data ):G {
     return depthFirst( data, item => {
         if( item && item.url ) return new Route( item );
         return item;
