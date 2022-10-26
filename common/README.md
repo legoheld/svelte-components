@@ -2,5 +2,5 @@
 
 A collection of utility functions that are reused in different packages.
 
-* [interpolate](common.ts#6)
-* [depthFirst](common.ts#21)
+* [interpolate](common.ts#L6)
+* [depthFirst](common.ts#L21)
