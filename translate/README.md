@@ -18,7 +18,7 @@ set( 'de', {
 
 
 Then you can use it in your svelte component:
-```svelte
+```html
 <script lang="ts">
     import { t } from "@lernetz/svelte-translation"
 </script>
@@ -37,7 +37,7 @@ set( 'de', {
 });
 ```
 
-```svelte
+```html
 <script lang="ts">
     import { t } from "@lernetz/svelte-translation"
 </script>
@@ -61,7 +61,7 @@ set( 'de', {
 });
 ```
 
-```svelte
+```html
 <script lang="ts">
     import { t } from "@lernetz/svelte-translation"
 </script>
@@ -101,7 +101,7 @@ set( {
 
 Then you can bind the `locale` store with a dropdown.
 So if the local changes all translations will be replaced.
-```svelte
+```html
 <script lang="ts">
     import { locale } from "@lernetz/svelte-translate";
 
