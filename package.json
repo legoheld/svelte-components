@@ -1,17 +1,8 @@
 {
-  "name": "@lernetz/lfw",
-  "version": "1.0.0",
-  "description": "A monorepo with different npm packages",
   "main": "index.js",
   "scripts": {
     "test": "npx playwright test"
   },
-  "repository": {
-    "type": "git",
-    "url": "https://gitlab.lernetz.ch/lfw/npm.git"
-  },
-  "author": "",
-  "license": "ISC",
   "workspaces": [
     "common",
     "routes",

@@ -23,7 +23,7 @@ interface TranslateOptions {
 }
 
 
-function translate( locale, key?, options?: TranslateOptions ) {
+function translate( locale, key?, options: TranslateOptions = {} ) {
 
     let trans = propLookup( translations, key ? locale + '.' + key : locale );
 
@@ -45,7 +45,7 @@ export const t = derived( locale, ( $locale ) => ( key, options: TranslateOption
 export function set( translations: KeyObject ): void;
 export function set( local: string, translation: object ): void;
 export function set( local: string, translation: () => Promise<object> ): void;
-export function set( l: string | KeyObject, translation?: object | ( () => Promise<object> ) ) {
+export function set( l: string | KeyObject, translation: object | ( () => Promise<object> ) = {} ) {
 
     // handle if all translations are set
     if( typeof l !== 'string' ) {

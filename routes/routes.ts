@@ -26,7 +26,7 @@ export class Route {
     }
 
     headers( headers: Record<string,string> ) {
-        return new Route( { ...this.config, headers: Object.assign( this.config.headers, headers ) } );
+        return new Route( { ...this.config, headers: Object.assign( this.config.headers || {}, headers ) } );
     }
 
     method( method: string ) {
