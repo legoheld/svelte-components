@@ -3,7 +3,7 @@
  * @param values The values to inject into placeholder
  * @returns The replaced text
  */
- export function interpolate( text: string, values: { [ key: string ]: string; } ) {
+export function interpolate( text: string, values: { [ key: string ]: string; } ) {
     return text.replace( /{(.*?)}/g, ( match: string, $1: string ) => {
         return values[ $1.trim() ] || '';
     } );

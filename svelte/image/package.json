@@ -1,0 +1,27 @@
+{
+  "name": "@lernetz/svelte-image",
+  "version": "1.0.0",
+  "description": "An responsive image component",
+  "main": "Image.svelte",
+  "devDependencies": {},
+  "scripts": {
+    "test": "npx playwright test",
+    "test-ct": "playwright test -c ../../playwright-ct.config.ts"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://gitlab.lernetz.ch/lfw/npm.git"
+  },
+  "keywords": [
+    "image",
+    "svelte"
+  ],
+  "author": "tobias.friedli@lernetz.ch",
+  "license": "ISC",
+  "dependencies": {
+    "@lernetz/routes": "^1.0.0"
+  },
+  "files": [
+    "Image.svelte"
+  ]
+}
