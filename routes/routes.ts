@@ -61,6 +61,21 @@ export class Route {
         return new Route( { ...this.config, url: decodeURI( u.href ) } );
     }
 
+    jsonApi( relative:string, data:{} = {} ) {
+        let route = this
+            .relative( relative )
+            .body( JSON.stringify( data ) )
+            .headers( { 'Accept': 'application/json', 'Content-Type': 'application/json' } )
+            .method('POST')
+
+        return route.fetch()
+            .then( response => response.json() ) // turn into json
+            .then( json => json?.data ) // retrive json api data
+            .catch( error => {
+                // TODO handle errors object
+            } );
+    }
+
     fetch() {
         return fetch( new Request( this.url, this.config ) );
     }
