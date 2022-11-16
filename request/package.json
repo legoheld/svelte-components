@@ -1,8 +1,8 @@
 {
-  "name": "@lernetz/routes",
+  "name": "@lernetz/request",
   "version": "1.0.0",
-  "description": "A helper to generate external routes including url, method, headers, etc..",
-  "main": "routes.ts",
+  "description": "A request builder to help to generate external routes including url, method, headers, etc..",
+  "main": "request.ts",
   "scripts": {
     "test": "npx playwright test"
   },

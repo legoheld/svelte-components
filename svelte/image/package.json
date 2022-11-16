@@ -19,7 +19,7 @@
   "author": "tobias.friedli@lernetz.ch",
   "license": "ISC",
   "dependencies": {
-    "@lernetz/routes": "^1.0.0"
+    "@lernetz/request": "^1.0.0"
   },
   "files": [
     "Image.svelte"

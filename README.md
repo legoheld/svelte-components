@@ -5,7 +5,7 @@ This monorepo is a collection of npm packages that will be published automatical
 ## Packages
 
  * [common](common/README.md)
- * [routes](routes/README.md)
+ * [request](request/README.md)
  * [translate](translate/README.md)
    
 

@@ -3,11 +3,11 @@
 
 <script lang="ts">
 
-    import { Route } from '@lernetz/routes';
+    import { RequestBuilder } from '@lernetz/request';
     import { onMount } from 'svelte';
 
     export const alt:string = 'test';
-    export let route:Route;
+    export let route:RequestBuilder;
     let img:HTMLImageElement;
 
     onMount( () => {

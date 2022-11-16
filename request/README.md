@@ -1,26 +1,26 @@
-# @lernetz/routes
+# @lernetz/request
 
-A module that helps to compose requests with url variables, relative path, method, headers, queries and hash.
+A module that helps to build requests with url variables, relative path, method, headers, queries and hash.
 
-Here are some examples how to use the routes module.
+Here are some examples how to use the request module.
 
-* Create a relative path from a base route:
+* Create a relative path from a base request:
 ```ts
-export const base = new Route( { url:'http://demo.ch/api' } );
+export const base = new RequestBuilder( { url:'http://demo.ch/api' } );
 
 base.relative( 'subfolder' ).fetch();
 ```
 
 * Use url variables:
 ```ts
-export const base = new Route( { url:'http://google.com/?q={query}' } );
+export const base = new RequestBuilder( { url:'http://google.com/?q={query}' } );
 
 base.vars( { query:"Kitties" } ).fetch();
 ```
 
 * Combine everything together:
 ```ts
-export const base = new Route( { url:'http://base.ch/{path}' } );
+export const base = new RequestBuilder( { url:'http://base.ch/{path}' } );
 base.relative('{section}') // http://base.ch/{path}/{section}
     .query( { lang:'{lang}' } ) // http://base.ch/{path}/{section}?lang={lang}
     .hash( '{anchor}' ) // http://base.ch/{path}/{section}?lang={lang}#{anchor}
@@ -32,9 +32,9 @@ base.relative('{section}') // http://base.ch/{path}/{section}
 ```
 
 
-# Route mapping
+# RequestBuilder mapping
 
-If you have an object with multiple route definitions you can use the `mapRoutes` helper function to recursive map objects into route instances.
+If you have an object with multiple request definitions you can use the `mapRequests` helper function to recursive map objects into RequestBuilder instances.
 
 ```ts
 // external data
@@ -47,13 +47,13 @@ let data = {
     }
 }
 
-// as these route definitions most often com from the outside
+// as these request definitions most often come from the outside
 // we can type these in the generic
-const routes = mapRoutes<{ image:Route, api:Route, service: { get:Route, delete:Route } } >( data );
+const requests = mapRequests<{ image:RequestBuilder, api:RequestBuilder, service: { get:RequestBuilder, delete:RequestBuilder } } >( data );
 
 
-// now you have access on the Route instances
-routes.image.vars( { name: 'cat', ext:'png' } ).url // http://img.src/cat.png
-routes.api.relative( 'delete' ).fetch() // will fetch ./api/delete
-routes.service.get.vars( { id:12 } ).body( JSON.stringify( { data:'more' } ) ).fetch() // will fetch http://my.other.service/api/12 with GET method and { data:'more' } body.
+// now you have access on the Request instances
+requests.image.vars( { name: 'cat', ext:'png' } ).url // http://img.src/cat.png
+requests.api.relative( 'delete' ).fetch() // will fetch ./api/delete
+requests.service.get.vars( { id:12 } ).body( JSON.stringify( { data:'more' } ) ).fetch() // will fetch http://my.other.service/api/12 with GET method and { data:'more' } body.
 

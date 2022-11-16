@@ -36,10 +36,10 @@ translate_publish:
     - npm -w translate publish
 
 
-routes_publish:
+request_publish:
   extends: .publish
   only:
     changes:
-      - "routes/**/*"  
+      - "request/**/*"  
   script:
-    - npm -w routes publish
+    - npm -w request publish
