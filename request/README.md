@@ -22,7 +22,7 @@ base.vars( { query:"Kitties" } ).fetch();
 ```ts
 export const base = new RequestBuilder( { url:'http://base.ch/{path}' } );
 base.relative('{section}') // http://base.ch/{path}/{section}
-    .query( { lang:'{lang}' } ) // http://base.ch/{path}/{section}?lang={lang}
+    .query( { lang:'{lang}' } ) // http://base.ch/{path}/{section}?lang={lang}
     .hash( '{anchor}' ) // http://base.ch/{path}/{section}?lang={lang}#{anchor}
     .vars( { path:'backend', section:'admin', lang:'de', anchor:'title' } ) // http://base.ch/backend/admin?lang=de#title
     .method('POST') // set request method
@@ -39,8 +39,8 @@ If you have an object with multiple request definitions you can use the `mapRequ
 ```ts
 // external data
 let data = {
-    image: { url: 'http://img.src/{name}.{ext}' },
-    api: { url: 'api', headers: { CSRF_TOKEN:'sdgfhgjsd' } },
+    image: { url: 'http://img.src/{name}.{ext}' },
+    api: { url: 'api', headers: { CSRF_TOKEN:'sdgfhgjsd' } },
     service: { 
         get: { 'http://my.other.service/api/{id}', method:'GET' },
         delete: { 'http://my.other.service/api/{id}', method:'DELETE' },
@@ -55,5 +55,5 @@ const requests = mapRequests<{ image:RequestBuilder, api:RequestBuilder, service
 // now you have access on the Request instances
 requests.image.vars( { name: 'cat', ext:'png' } ).url // http://img.src/cat.png
 requests.api.relative( 'delete' ).fetch() // will fetch ./api/delete
-requests.service.get.vars( { id:12 } ).body( JSON.stringify( { data:'more' } ) ).fetch() // will fetch http://my.other.service/api/12 with GET method and { data:'more' } body.
+requests.service.get.vars( { id:12 } ).body( JSON.stringify( { data:'more' } ) ).fetch() // will fetch http://my.other.service/api/12 with GET method and { data:'more' } body.
 
