@@ -1,11 +1,11 @@
 import { depthFirst } from "@lernetz/common";
-import { Route } from "@lernetz/routes";
+import { RequestBuilder } from "@lernetz/request";
 
 
 
 export class ModelGateway {
 
-    base:Route;
+    base:RequestBuilder;
     in:( data:any ) => any;
     out:( data:any ) => any;
 

@@ -8,7 +8,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "https://gitlab.lernetz.ch/lfw/npm.git"
+    "url": "https://gitlab.lernetz.ch/lfw/svelte-components.git"
   },
   "dependencies": {
     "svelte": "^3.0.0"
