@@ -1,10 +1,10 @@
 import { expect, test } from '@playwright/test';
-import { mapRoutes, Route } from '../routes';
+import { mapRequests, RequestBuilder } from '../request';
 
 
 test.describe('Test routes', () => {
 
-    let routes = mapRoutes<{path:Route, query:Route, settings:Route}>( {
+    let routes = mapRequests<{path:RequestBuilder, query:RequestBuilder, settings:RequestBuilder}>( {
         path: { url:'http://google.com/{one}/{two}/{three}' },
         query: { url:'http://google.com?q={query}'},
         settings: { url:'http://google.com', method:"POST", headers:{ MyHeader:"Peng" } }

@@ -6,7 +6,7 @@
   },
   "workspaces": [
     "common",
-    "routes",
+    "request",
     "translate",
     "svelte/image"
   ],
