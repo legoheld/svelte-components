@@ -2,7 +2,7 @@
   "name": "@lernetz/model-api",
   "version": "1.0.0",
   "description": "A module to communicate with the Model API package for laravel",
-  "main": "translate.ts",
+  "main": "index.ts",
   "scripts": {
     "test": "npx playwright test"
   },
