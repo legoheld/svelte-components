@@ -39,11 +39,13 @@ export class ModelGateway {
         let oldValues = {};
 
         Object.keys( newValues ).forEach( ( key ) => {
+
+            let ref = get( model );
+
             // get old value from model
-            oldValues[ key ] = model[ key ];
+            oldValues[ key ] = ref[ key ];
 
             // as we have to previous value, we can apply it on the model
-            let ref = get( model );
             ref[ key ] = newValues[ key ];
             model.set( ref ); // update svelte store
 
@@ -97,11 +99,7 @@ export class ModelGateway {
 }
 
 
-
-export interface DBModel extends Writable<DBModel> {
-    modelName: string;
-    id: string;
-}
+export type DBModel = Writable<{ modelName: string, id: string; }>;
 
 export interface QueryObject {
     where: {

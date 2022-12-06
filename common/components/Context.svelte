@@ -2,9 +2,9 @@
     import { setContext } from "svelte";
 
 
+
     // inject all props into context
-    for (const prop in $$props ) {
-        console.log( "Wrote context", prop );
+    for (const prop in $$restProps ) {
         setContext( prop, $$props[ prop ] )
     }
 </script>
