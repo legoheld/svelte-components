@@ -1,3 +1,5 @@
+export { default as Context } from './components/Context.svelte';
+
 /**
  * @param text The text containing {...} placeholder
  * @param values The values to inject into placeholder
@@ -16,7 +18,7 @@ export function interpolate( text: string, values: { [ key: string ]: string; } 
  * invokes the given closure on every item in structure.
  * @param data The data to traverse on
  * @param func The closure function to invoke on every item - make sure to return an item
- * @returns The same data after traversation. If the closure returns different items the returned data is mapped. 
+ * @returns The same data after traversation. If the closure returns different items the returned data is mapped.
  */
 export function depthFirst( data: any, func: ( d: any ) => any ) {
 

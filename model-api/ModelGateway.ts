@@ -1,6 +1,7 @@
 import { depthFirst } from "@lernetz/common";
 import { RequestBuilder } from "@lernetz/request";
-
+import { get, writable, Writable } from 'svelte/store';
+import { isWritable } from './guards';
 
 
 export class ModelGateway {
@@ -10,7 +11,7 @@ export class ModelGateway {
     out: ( data: any ) => any;
 
     constructor( config: Partial<ModelGateway> ) {
-        Object.assign( this, { in: noop, out: noop, ...config } );
+        Object.assign( this, { in: wrapStores, out: unwrapStores, ...config } );
     }
 
 
@@ -42,7 +43,9 @@ export class ModelGateway {
             oldValues[ key ] = model[ key ];
 
             // as we have to previous value, we can apply it on the model
-            model[ key ] = newValues[ key ];
+            let ref = get( model );
+            ref[ key ] = newValues[ key ];
+            model.set( ref ); // update svelte store
 
             // reduce values for transmission
             newValues[ key ] = reduceModels( newValues[ key ] );
@@ -95,7 +98,7 @@ export class ModelGateway {
 
 
 
-export interface DBModel {
+export interface DBModel extends Writable<DBModel> {
     modelName: string;
     id: string;
 }
@@ -117,12 +120,18 @@ export interface QueryObject {
 
 
 function reduceModels( obj: any ) {
-    return depthFirst( obj, ( i ) => {
+    return depthFirst( unwrapStores( obj ), ( i ) => {
         return ( i?.id && i?.modelName ) ? { id: i.id, modelName: i.modelName } : i;
     } );
 }
 
 
-const noop = ( d ) => d;
+const wrapStores = ( d ) => {
+    return depthFirst( d, ( i ) => i?.modelName ? writable( i ) : i );
+};
+
+const unwrapStores = ( d ) => {
+    return depthFirst( d, ( i ) => isWritable( i ) ? get( i ) : i );
+}
 
 
