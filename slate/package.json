@@ -1,0 +1,20 @@
+{
+  "name": "@lernetz/svelte-slate",
+  "version": "1.0.0",
+  "description": "A slate frontend rendered with svelte",
+  "main": "index.ts",
+  "scripts": {
+    "test": "npx playwright test"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://gitlab.lernetz.ch/lfw/svelte-components.git"
+  },
+  "dependencies": {
+    "is-hotkey": "^0.2.0",
+    "is-url": "^1.2.4",
+    "slate": "^0.87.0"
+  },
+  "author": "",
+  "license": "ISC"
+}

@@ -7,11 +7,11 @@ import { isWritable } from './guards';
 export class ModelGateway {
 
     base: RequestBuilder;
-    in: ( data: any ) => any;
-    out: ( data: any ) => any;
+    in: ( data: { modelName: string; } ) => any;
+    out: ( data: Writable<any> ) => any;
 
     constructor( config: Partial<ModelGateway> ) {
-        Object.assign( this, { in: wrapStores, out: unwrapStores, ...config } );
+        Object.assign( this, { in: noop, out: noop, ...config } );
     }
 
 
@@ -19,7 +19,7 @@ export class ModelGateway {
     query<Type extends DBModel[] = DBModel[]>( queryObject: QueryObject ) {
         return this.base
             .jsonApi( "query", queryObject )
-            .then<Type>( ( res ) => this.in( res ) );
+            .then<Type>( ( res ) => traverseIn( res, this.in ) );
     }
 
 
@@ -29,8 +29,8 @@ export class ModelGateway {
         modelName: string;
     }, relations: object = {} ) {
         return this.base
-            .jsonApi( "create", { model: this.out( model ), relations } )
-            .then<Type>( ( res ) => this.in( res ) );
+            .jsonApi( "create", { model: traverseOut( model, this.out ), relations } )
+            .then<Type>( ( res ) => traverseIn( res, this.in ) );
     }
 
 
@@ -56,14 +56,14 @@ export class ModelGateway {
         } );
 
         return this.base
-            .jsonApi( "update", this.out( {
-                model: reduceModels( model ),
+            .jsonApi( "update", traverseOut( {
+                model: reduceModels( traverseOut( model, this.out ) ),
                 newValues,
                 oldValues,
-            } ) )
+            }, this.out ) )
             .then<Type>( ( res: any ) => {
                 // apply tranformations
-                res = this.in( res );
+                res = traverseIn( res, this.in );
 
                 // return original model
                 return model;
@@ -74,8 +74,8 @@ export class ModelGateway {
 
     delete<Type extends DBModel = DBModel>( model: Type ) {
         return this.base
-            .jsonApi( "delete", this.out( { model: reduceModels( model ) } ) )
-            .then<Type>( ( res ) => this.in( res ) );
+            .jsonApi( "delete", traverseOut( { model: reduceModels( model ) }, this.out ) )
+            .then<Type>( ( res ) => traverseIn( res, this.in ) );
     }
 
 
@@ -83,23 +83,26 @@ export class ModelGateway {
 
     restore<Type extends DBModel = DBModel>( model: Type ) {
         return this.base
-            .jsonApi( "restore", this.out( { model: reduceModels( model ) } ) )
-            .then<Type>( ( res ) => this.in( res ) );
+            .jsonApi( "restore", traverseOut( { model: reduceModels( model ) }, this.out ) )
+            .then<Type>( ( res ) => traverseIn( res, this.in ) );
     }
 
 
 
     clone<Type extends DBModel = DBModel>( model: Type ) {
         return this.base
-            .jsonApi( "copy", this.out( { model: reduceModels( model ) } ) )
-            .then<Type>( ( res ) => this.in( res ) );
+            .jsonApi( "copy", traverseOut( { model: reduceModels( model ) }, this.out ) )
+            .then<Type>( ( res ) => traverseIn( res, this.in ) );
     }
 
 
 }
 
 
-export type DBModel = Writable<{ modelName: string, id: string; }>;
+export type DBModel = Writable<{
+    modelName: string,
+    id: string;
+}>;
 
 export interface QueryObject {
     where: {
@@ -118,18 +121,41 @@ export interface QueryObject {
 
 
 function reduceModels( obj: any ) {
-    return depthFirst( unwrapStores( obj ), ( i ) => {
+    return depthFirst( obj, ( i ) => {
         return ( i?.id && i?.modelName ) ? { id: i.id, modelName: i.modelName } : i;
     } );
 }
 
 
-const wrapStores = ( d ) => {
-    return depthFirst( d, ( i ) => i?.modelName ? writable( i ) : i );
-};
+function traverseIn( d: any, inFunc: ( d: any ) => any ) {
+    return depthFirst( d, ( i ) => {
+        // handle model files
+        if( i?.modelName ) {
+            // invoke use function to create custom stores or model adjustments
+            i = inFunc( i );
+            // turn into store
+            if( !isWritable( i ) ) i = writable( i );
+        }
 
-const unwrapStores = ( d ) => {
-    return depthFirst( d, ( i ) => isWritable( i ) ? get( i ) : i );
+        return i;
+    } );
 }
 
+
+function traverseOut( d: any, outFunc: ( d: any ) => any ) {
+    return depthFirst( d, ( i ) => {
+        // handle stores
+        if( isWritable( i ) ) {
+            // invoke user function to adjust model to backend
+            i = outFunc( i );
+            // unwrap store
+            if( isWritable( i ) ) i = get( i );
+        }
+
+        return i;
+    } );
+}
+
+
+const noop = ( d ) => d;
 
