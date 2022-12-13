@@ -9,4 +9,5 @@
     let html = getContext<HtmlContext>( 'html' );
 </script>
 
-<span use:registerText={ {path, html } }>{ element.text.trim() != '' ? element.text : '\uFEFF' }</span>
+
+<span class:font-bold={element.bold} class:italic={element.italic} use:registerText={ {path, html } }>{ element.text.trim() != '' ? element.text : '\uFEFF' }</span>

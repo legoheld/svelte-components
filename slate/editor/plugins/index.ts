@@ -6,4 +6,5 @@ export { Selection } from './Selection';
 export { Style } from './Style';
 export { Type } from './Type';
 export { List } from './List';
+export { Cut } from './Cut';
 export { Hotkey } from './Hotkey';

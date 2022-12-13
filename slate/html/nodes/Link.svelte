@@ -1,7 +1,7 @@
 <script lang="ts">
-    import { HtmlContext, registerElement, resolveType } from "../Html.svelte";
-    import { getContext, onMount } from "svelte";
-    import { LinkElement } from "../../editor/plugins/Link";
+    import { getContext } from "svelte";
+    import { LinkElement } from "../../defaults";
+    import { HtmlContext, registerElement, resolveNode } from "../Html.svelte";
 
 
     export let element:LinkElement;
@@ -12,6 +12,6 @@
 
 <a href="{element.url}" target="{ element.target || '_blank' }" use:registerElement={ {path, html}}>
     {#each element.children as child, index }
-        <svelte:component this={ resolveType( child ) } element={child} path={ [ ...path, index ] }></svelte:component>
+        <svelte:component this={ resolveNode( child ) } element={child} path={ [ ...path, index ] }></svelte:component>
     {/each}
 </a>

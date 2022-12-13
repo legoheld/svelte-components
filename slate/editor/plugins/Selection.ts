@@ -1,4 +1,4 @@
-import { Range, Transforms, Editor as SlateEditor } from "slate";
+import { Range, Transforms } from "slate";
 import { tick } from "svelte";
 import { Editor } from "../Editor";
 

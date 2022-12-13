@@ -1,18 +1,18 @@
 <script context="module" lang="ts">
 
-    import { Element as SlateElement, Range, Text as SlateText } from "slate";
+    import { Element as SlateElement, Text as SlateText } from "slate";
 
-    export interface Types {
+    export interface Nodes {
         [key:string]:ConstructorOfATypedSvelteComponent;
     }
 
-    export function resolveType( element:SlateText|SlateElement ) {
+    export function resolveNode( element:SlateText|SlateElement ) {
         let html = getContext<HtmlContext>( 'html' );
-        return html.types[ ( SlateText.isText( element ) ) ? 'text' : element.type ];
+        return html.nodes[ ( SlateText.isText( element ) ) ? 'text' : element.type ];
     }
 
     export interface HtmlContext {
-        types:Types,
+        nodes:Nodes,
         register: ( path:number[], n:Node ) => void,
     }
 
@@ -29,22 +29,9 @@
 
 <script lang="ts">
     import { getContext, setContext } from "svelte";
-    import Link from "./types/Link.svelte";
-    import Text from "./types/Text.svelte";
-    import TypeElement from "./types/TypeElement.svelte";
+    import { nodes as defaultNodes } from "./defaults";
 
-    export let types:Types = {
-        'p':TypeElement,
-        'ul':TypeElement,
-        'ol':TypeElement,
-        'li':TypeElement,
-        'h1':TypeElement,
-        'h2':TypeElement,
-        'h3':TypeElement,
-        'a':Link,
-        'text':Text
-    };
-
+    export let nodes:Nodes = defaultNodes;
 
     export let content:Array<SlateElement>;
     let domPath:Map<Node,number[]> = new Map();
@@ -52,7 +39,7 @@
 
 
     setContext( 'html', {
-        types,
+        nodes,
         register: ( path:number[], n:Node ) => {
             pathDom.set( path.join( ',' ), n );
             domPath.set( n, path );
@@ -70,5 +57,5 @@
 </script>
 
 {#each content as element, index}
-    <svelte:component this={resolveType( element )} element={element} path={ [ index ] }></svelte:component>
+    <svelte:component this={resolveNode( element )} element={element} path={ [ index ] }></svelte:component>
 {/each}

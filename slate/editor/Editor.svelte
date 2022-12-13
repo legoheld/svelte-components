@@ -10,6 +10,7 @@
     import { Element, Range, Selection } from "slate";
 
     import { onMount } from "svelte";
+    import { nodes as defaultNodes } from "../html/defaults";
     import Html from "../html/Html.svelte";
     import { Editor as BaseEditor } from './Editor';
 
@@ -19,8 +20,8 @@
 
     export let content:Element[];
     export let editor:BaseEditor;
-
     export let selection:Selection;
+    export let nodes = defaultNodes;
 
     onMount( () => {
 
@@ -111,5 +112,5 @@
     on:compositionend={editor.events.onCompositionEnd}
     on:paste={editor.events.onPaste}
     on:cut={editor.events.onCut}>
-    <Html bind:content bind:this={html}></Html>
+    <Html bind:content bind:this={html} nodes={nodes}></Html>
 </div>
