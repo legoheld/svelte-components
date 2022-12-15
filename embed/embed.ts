@@ -16,7 +16,7 @@ export interface Provider {
 }
 
 
-export function create( providers: Provider[], defaults: Partial<IFrameOptions> = { ratio: 0.75, allowfullscreen: true } ) {
+export function create( providers: Provider[], defaults: Partial<IFrameOptions> = { ratio: 4/3, allowfullscreen: true } ) {
 
     return async ( input, options: Partial<IFrameOptions> = {} ) => {
         for( const provider of providers ) {
