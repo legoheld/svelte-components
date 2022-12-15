@@ -1,6 +1,6 @@
 {
   "name": "@lernetz/embed",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Small package that generates the embed code from an input string. Different providers will generate the iframe options for the final iframe",
   "main": "embed.ts",
   "scripts": {

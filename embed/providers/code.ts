@@ -18,7 +18,11 @@ export function code( input: string ): ReturnType<Provider> {
         title: /title="(.*?)"/,
         sandbox: /sandbox="(.*?)"/,
         allowfullscreen: /allowfullscreen/,
-    } );
+    });
+
+    // calculate ratio
+    const ratio = calcRatio( result.width, result.height );
+    if( ratio ) result.ratio = ratio;
 
     if( result.src ) return result as IFrameOptions;
 
@@ -28,7 +32,7 @@ export function code( input: string ): ReturnType<Provider> {
 
 
 
-function optionalMatch( input: string, matches: { [ key: string ]: RegExp; } ): Partial<IFrameOptions> {
+export function optionalMatch( input: string, matches: { [ key: string ]: RegExp; } ):any {
     let res = {};
     Object.keys( matches ).forEach( key => {
         let match = input.match( matches[ key ] );
@@ -36,3 +40,11 @@ function optionalMatch( input: string, matches: { [ key: string ]: RegExp; } ): 
     } );
     return res;
 }
+
+
+export function calcRatio( width:string, height:string ) {
+    const w = parseInt( width?.replace( 'px','' ).trim() );
+    const h = parseInt( height?.replace( 'px','' ).trim() );
+    if( w & h ) return w / h;
+}
+

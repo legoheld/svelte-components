@@ -1,5 +1,5 @@
 import { IFrameOptions, Provider } from "../embed";
-import { code } from "./code";
+import { code, optionalMatch } from "./code";
 
 /**
  * A provider that queries iframely for the oembed / iframe settings
@@ -12,8 +12,22 @@ export function iframely( url: string ): Provider {
             let result = await fetch( url + '/iframely?uri=' + encodeURIComponent( input ) ).then( res => res.json() );
             if( result && result.html ) {
 
-                // parse the html result of iframely
-                return code( result.html );
+                // get regular iframe params
+                let codeMatches = code( result.html ) as {};
+
+                // extract padding-bottom for ratio calc
+                let padding = optionalMatch( result.html, {
+                    ratio: /padding-bottom:(.*?);/i,
+                });
+                if( padding.ratio ) {
+                    // turn padding percentage into ratio
+                    padding.ratio = parseFloat( padding.ratio.replace( '%', '' ).trim() ) / 100;
+
+                    // return including ratio
+                    return Object.assign( codeMatches, padding ) as IFrameOptions
+                }
+
+                return codeMatches as IFrameOptions
             }
         } catch( e ) {
             return;
