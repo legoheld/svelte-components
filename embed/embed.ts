@@ -1,6 +1,3 @@
-import { code } from "./providers/code";
-import { iframely } from "./providers/iframely";
-
 export interface IFrameOptions {
     src: string;
     width?: string;
@@ -30,11 +27,5 @@ export function create( providers: Provider[], defaults: Partial<IFrameOptions> 
         return Object.assign( {}, defaults, options, { src: input } );
     };
 }
-
-
-export const allProviders: Provider[] = [
-    code,
-    iframely( 'https://iframely.b.lernetz.host/' )
-]
 
 
