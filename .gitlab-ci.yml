@@ -23,6 +23,7 @@ common_publish:
   only:
     changes:
       - "common/**/*"  
+  when: manual
   script:
     - npm -w common publish
 
@@ -32,6 +33,7 @@ translate_publish:
   only:
     changes:
       - "translate/**/*"  
+  when: manual
   script:
     - npm -w translate publish
 
@@ -41,6 +43,7 @@ request_publish:
   only:
     changes:
       - "request/**/*"  
+  when: manual
   script:
     - npm -w request publish
 
@@ -49,5 +52,6 @@ embed_publish:
   only:
     changes:
       - "embed/**/*"  
+  when: manual
   script:
     - npm -w embed publish
