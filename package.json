@@ -2,7 +2,8 @@
   "main": "index.js",
   "scripts": {
     "test-ct": "playwright test -c ./.playwright/ct.config.ts",
-    "test": "playwright test common embed model-api request slate"
+    "test": "playwright test common embed model-api request slate",
+    "postversion": "git push --follow-tags"
   },
   "workspaces": [
     "common",
