@@ -21,7 +21,6 @@ export function Cut( editor: Editor ) {
 
     events.onCut = ( e ) => {
 
-        console.log( e );
         e.preventDefault();
         cutToClipboard( editor, e );
 
@@ -32,12 +31,12 @@ export function Cut( editor: Editor ) {
 }
 
 
-function cutToClipboard( editor, event?: ClipboardEvent ) {
+function cutToClipboard( editor: Editor, event?: ClipboardEvent ) {
     const text = editor.slate.selection ? SlateEditor.string( editor.slate, editor.slate.selection ) : "";
     if( event && event.clipboardData ) {
         event.clipboardData.setData( "text/plain", text );
     } else {
-        navigator.clipboard.writeText( text );
+        navigator.clipboard.write( [ new ClipboardItem( { "text/plain": text } ) ] );
     }
     editor.slate.deleteFragment();
 }
