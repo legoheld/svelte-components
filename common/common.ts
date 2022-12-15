@@ -1,4 +1,3 @@
-export { default as Context } from './components/Context.svelte';
 
 /**
  * @param text The text containing {...} placeholder
