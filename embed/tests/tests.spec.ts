@@ -8,14 +8,13 @@ test.describe( 'embed', () => {
 
     test( 'default options', async () => {
 
-        let embed = create( [], { src: "https://my-source.com", width: "476px", height: "288px" } );
+        let embed = create( [], { src: "https://my-source.com", ratio:0.5625 } );
 
         let options = await embed( 'https://my-new-domain.ch' );
 
         expect( options ).toEqual( {
             src: 'https://my-new-domain.ch',
-            width: "476px",
-            height: "288px"
+            ratio:0.5625
         } );
     } );
 } );
@@ -38,13 +37,14 @@ test.describe( 'Code provider', () => {
 
         expect( code( source ) ).toEqual( {
             src: "https://my-source.com",
-            width: "476px",
-            height: "288px",
+            ratio: 1.6527777777777777,
             frameborder: "0",
             allow: "geolocation 'self' https://a.example.com https://b.example.com; fullscreen 'none'",
             allowfullscreen: true,
             sandbox: "allow-popups",
-            title: "title"
+            title: "title",
+            height: "288px",
+            width: "476px"
         } );
     } );
 
@@ -59,8 +59,9 @@ test.describe( 'Code provider', () => {
 
         expect( code( source ) ).toEqual( {
             src: "https://my-source.com",
-            width: "476px",
+            ratio: 1.6527777777777777,
             height: "288px",
+            width: "476px"
         } );
     } );
 } );

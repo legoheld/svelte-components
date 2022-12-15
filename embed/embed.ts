@@ -1,12 +1,13 @@
 export interface IFrameOptions {
     src: string;
-    width?: string;
-    height?: string;
+    ratio?: number;
     title?: string;
     frameborder?: number;
     allow?: string;
     allowfullscreen?: boolean;
     sandbox?: string;
+    width?: string;
+    height?: string;
 }
 
 
@@ -15,7 +16,7 @@ export interface Provider {
 }
 
 
-export function create( providers: Provider[], defaults: Partial<IFrameOptions> = { width: '100%', height: '600px', allowfullscreen: true } ) {
+export function create( providers: Provider[], defaults: Partial<IFrameOptions> = { ratio: 0.75, allowfullscreen: true } ) {
 
     return async ( input, options: Partial<IFrameOptions> = {} ) => {
         for( const provider of providers ) {
