@@ -20,7 +20,7 @@ test:
 
 common_publish:
   extends: .publish
-  rules:
+  only:
     changes:
       - "common/**/*"  
   script:
@@ -29,7 +29,7 @@ common_publish:
 
 translate_publish:
   extends: .publish
-  rules:
+  only:
     changes:
       - "translate/**/*"  
   script:
@@ -38,7 +38,7 @@ translate_publish:
 
 request_publish:
   extends: .publish
-  rules:
+  only:
     changes:
       - "request/**/*"  
   script:
@@ -46,7 +46,7 @@ request_publish:
 
 embed_publish:
   extends: .publish
-  rules:
+  only:
     changes:
       - "embed/**/*"  
   script:
