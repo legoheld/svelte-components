@@ -1,26 +1,19 @@
 {
   "main": "index.js",
   "scripts": {
-    "test": "playwright test -c ./.playwright/ct.config.ts",
-    "story:dev": "histoire dev",
-    "story:build": "histoire build",
-    "story:preview": "histoire preview"
+    "test": "playwright test -c ./.playwright/ct.config.ts"
   },
   "workspaces": [
     "common",
     "request",
     "translate",
-    "image"
+    "image",
+    "embed"
   ],
   "type": "module",
   "devDependencies": {
-    "@histoire/plugin-svelte": "^0.11.7",
     "@playwright/experimental-ct-svelte": "^1.27.1",
     "@playwright/test": "^1.27.1",
-    "@sveltejs/vite-plugin-svelte": "^1.2.0",
-    "histoire": "^0.11.7",
-    "svelte-preprocess": "^4.10.7",
-    "typescript": "^4.8.4",
-    "vite": "^3.2.4"
+    "typescript": "^4.8.4"
   }
 }

@@ -20,7 +20,7 @@ test:
 
 common_publish:
   extends: .publish
-  only:
+  rules:
     changes:
       - "common/**/*"  
   script:
@@ -29,7 +29,7 @@ common_publish:
 
 translate_publish:
   extends: .publish
-  only:
+  rules:
     changes:
       - "translate/**/*"  
   script:
@@ -38,8 +38,16 @@ translate_publish:
 
 request_publish:
   extends: .publish
-  only:
+  rules:
     changes:
       - "request/**/*"  
   script:
     - npm -w request publish
+
+embed_publish:
+  extends: .publish
+  rules:
+    changes:
+      - "embed/**/*"  
+  script:
+    - npm -w embed publish

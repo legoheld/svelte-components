@@ -80,9 +80,15 @@ test.describe( 'Quizlet provider', () => {
             src: 'https://quizlet.com/137843275/flashcards/embed'
         } );
     } );
+    test( 'With mode', async () => {
+        let result = await embed( 'https://quizlet.com/137843275/learn/' );
+        expect( result ).toEqual( {
+            src: 'https://quizlet.com/137843275/learn/embed'
+        } );
+    } );
 } );
 
-
+/* Can not test as there is no fetch in nodejs where playwright executes
 test.describe( 'Test iframely provider', () => {
     let embed = create( [
         iframely( 'https://iframely.b.lernetz.host/' )
@@ -99,5 +105,6 @@ test.describe( 'Test iframely provider', () => {
         } );
     } );
 } );
+*/
 
 
