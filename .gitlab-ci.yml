@@ -5,6 +5,7 @@
     - test
   tags:
     - dind
+  when: manual
   before_script:
     - npm set registry https://npm.lernetz.ch
     - echo '//npm.lernetz.ch/:_authToken=${NPM_TOKEN}'>.npmrc
@@ -17,41 +18,24 @@ test:
     - npm run test
 
 
-
 common_publish:
   extends: .publish
-  only:
-    changes:
-      - "common/**/*"  
-  when: manual
   script:
     - npm -w common publish
 
 
 translate_publish:
   extends: .publish
-  only:
-    changes:
-      - "translate/**/*"  
-  when: manual
   script:
     - npm -w translate publish
 
 
 request_publish:
   extends: .publish
-  only:
-    changes:
-      - "request/**/*"  
-  when: manual
   script:
     - npm -w request publish
 
 embed_publish:
   extends: .publish
-  only:
-    changes:
-      - "embed/**/*"  
-  when: manual
   script:
     - npm -w embed publish
