@@ -43,8 +43,16 @@ export function optionalMatch( input: string, matches: { [ key: string ]: RegExp
 
 
 export function calcRatio( width:string, height:string ) {
-    const w = parseInt( width?.replace( 'px','' ).trim() );
-    const h = parseInt( height?.replace( 'px','' ).trim() );
+    const w = parseValue( width );
+    const h = parseValue( height );
     if( w & h ) return w / h;
+}
+
+
+function parseValue( s:string ) {
+    // we can not parse percentage
+    if( s.indexOf( '%' ) ) return NaN;
+
+    return  parseInt( s?.replace( 'px','' ).trim() );
 }
 
