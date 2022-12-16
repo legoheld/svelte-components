@@ -21,10 +21,10 @@ export function iframely( url: string ): Provider {
                 });
                 if( padding.ratio ) {
                     // turn padding percentage into ratio
-                    padding.ratio = parseFloat( padding.ratio.replace( '%', '' ).trim() ) / 100;
+                    padding.ratio = 100 / parseFloat( padding.ratio.replace( '%', '' ).trim() );
 
-                    // return including ratio
-                    return Object.assign( codeMatches, padding ) as IFrameOptions
+                    // return including ratio if valid
+                    if( padding.ratio ) return Object.assign( codeMatches, padding ) as IFrameOptions
                 }
 
                 return codeMatches as IFrameOptions
