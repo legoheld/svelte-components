@@ -65,6 +65,19 @@ test.describe( 'Code provider', () => {
         } );
     } );
 
+
+    test( 'undefined w/h', ( { } ) => {
+        let source = `<iframe
+            src="https://my-source.com">
+        </iframe>`;
+
+        // will not calcualte ratio because of percentage value
+        expect( code( source ) ).toEqual( {
+            src: "https://my-source.com"
+        } );
+    } );
+
+
     test( 'partial iframe code', ( { } ) => {
         let source = `<iframe
             src="https://my-source.com"
