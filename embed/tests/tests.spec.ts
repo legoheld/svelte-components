@@ -77,6 +77,22 @@ test.describe( 'Code provider', () => {
         } );
     } );
 
+    test( 'for proper ratio calc', ( { } ) => {
+        let source = `<iframe
+            src="https://player.vimeo.com/video/183907844"
+            width="640"
+            height="360"
+            </iframe>`;
+            
+            // will not calcualte ratio because of percentage value
+            expect( code( source ) ).toEqual( {
+            src: "https://player.vimeo.com/video/183907844",
+            width: '640',
+            height: '360',
+            ratio: 1.7777777777777777
+        } );
+    } );
+
 
     test( 'partial iframe code', ( { } ) => {
         let source = `<iframe

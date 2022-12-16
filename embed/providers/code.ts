@@ -45,7 +45,7 @@ export function optionalMatch( input: string, matches: { [ key: string ]: RegExp
 export function calcRatio( width:string, height:string ) {
     const w = parseValue( width );
     const h = parseValue( height );
-    if( w & h ) return w / h;
+    if( !isNaN( w ) && !isNaN( h ) ) return w / h;
 }
 
 
