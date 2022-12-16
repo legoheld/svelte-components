@@ -50,6 +50,21 @@ test.describe( 'Code provider', () => {
 
 
 
+    test( 'percentage width', ( { } ) => {
+        let source = `<iframe
+            src="https://my-source.com"
+            width="100%"
+            height="288px">
+        </iframe>`;
+
+        // will not calcualte ratio because of percentage value
+        expect( code( source ) ).toEqual( {
+            src: "https://my-source.com",
+            height: "288px",
+            width: "100%",
+        } );
+    } );
+
     test( 'partial iframe code', ( { } ) => {
         let source = `<iframe
             src="https://my-source.com"

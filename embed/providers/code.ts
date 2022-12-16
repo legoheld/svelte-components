@@ -51,7 +51,7 @@ export function calcRatio( width:string, height:string ) {
 
 function parseValue( s:string ) {
     // we can not parse percentage
-    if( s.indexOf( '%' ) ) return NaN;
+    if( s.indexOf( '%' ) >= 0 ) return NaN;
 
     return  parseInt( s?.replace( 'px','' ).trim() );
 }
