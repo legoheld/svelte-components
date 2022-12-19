@@ -1,14 +1,16 @@
 import { expect, test } from '@playwright/test';
 import { create } from '../embed';
+import { fallback } from '../providers';
 import { code } from '../providers/code';
 import { iframely } from '../providers/iframely';
 import { quizlet } from '../providers/quizlet';
+import { youtube } from '../providers/youtube';
 
 test.describe( 'embed', () => {
 
-    test( 'default options', async () => {
+    test( 'default options and fallback', async () => {
 
-        let embed = create( [], { src: "https://my-source.com", ratio:0.5625 } );
+        let embed = create( [ fallback ], { src: "https://my-source.com", ratio:0.5625 } );
 
         let options = await embed( 'https://my-new-domain.ch' );
 
@@ -132,6 +134,47 @@ test.describe( 'Quizlet provider', () => {
         } );
     } );
 } );
+
+
+test.describe( "test youtube", () => {
+    let embed = create( [ youtube ], {} );
+
+    test( 'start time', async () => {
+        let result1 = await embed( 'https://www.youtube.com/watch?v=wZZ7oFKsKzY&t=120' );
+        let result2 = await embed( 'https://www.youtube.com/watch?v=wZZ7oFKsKzY&time_continue=173' );
+        expect( result1 ).toEqual( {
+            src: 'https://www.youtube.com/embed/wZZ7oFKsKzY?start=120',
+        })
+        expect( result2 ).toEqual( {
+            src: 'https://www.youtube.com/embed/wZZ7oFKsKzY?start=173',
+        })
+    });
+
+    test( 'list param', async () => {
+        let result1 = await embed( 'https://www.youtube.com/watch?v=xhCS0iR1ab0&list=PLpyju4SX4A6jfHyEA1P46ghBASNjh3Lxv&t=55' );
+        expect( result1 ).toEqual( {
+            src: 'https://www.youtube.com/embed/xhCS0iR1ab0?start=55&list=PLpyju4SX4A6jfHyEA1P46ghBASNjh3Lxv',
+        })
+    });
+    
+    test( 'short form', async () => {
+        let result1 = await embed( 'https://youtu.be/xhCS0iR1ab0?t=55' );
+        expect( result1 ).toEqual( {
+            src: 'https://www.youtube.com/embed/xhCS0iR1ab0?start=55',
+        })
+
+    })
+
+    test( 'embed form', async () => {
+        let result1 = await embed( 'https://www.youtube.com/embed/xhCS0iR1ab0?start=55&list=PLpyju4SX4A6jfHyEA1P46ghBASNjh3Lxv' );
+        expect( result1 ).toEqual( {
+            src: 'https://www.youtube.com/embed/xhCS0iR1ab0?start=55&list=PLpyju4SX4A6jfHyEA1P46ghBASNjh3Lxv',
+        })
+
+    })
+
+
+})
 
 /* Can not test as there is no fetch in nodejs where playwright executes
 test.describe( 'Test iframely provider', () => {

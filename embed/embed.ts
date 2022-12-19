@@ -24,8 +24,7 @@ export function create( providers: Provider[], defaults: Partial<IFrameOptions> 
             if( res ) return Object.assign( {}, defaults, options, res );
         }
 
-        // if nothing matches return fallback where the input will be the src of the iframe
-        return Object.assign( {}, defaults, options, { src: input } );
+        return;
     };
 }
 
