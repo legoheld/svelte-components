@@ -4,6 +4,7 @@ import { fallback } from '../providers';
 import { code } from '../providers/code';
 import { iframely } from '../providers/iframely';
 import { quizlet } from '../providers/quizlet';
+import { vimeo } from '../providers/vimeo';
 import { youtube } from '../providers/youtube';
 
 test.describe( 'embed', () => {
@@ -174,7 +175,28 @@ test.describe( "test youtube", () => {
     })
 
 
-})
+});
+
+
+test.describe( "test vimeo", () => {
+    let embed = create( [ vimeo ], {} );
+
+    test( 'check urls', async () => {
+        let result1 = await embed( 'https://vimeo.com/289836809' );
+        let result2 = await embed( 'https://www.vimeo.com/289836809?title=0&byline=0&portrait=0' );
+        let result3 = await embed( 'https://player.vimeo.com/video/289836809' );
+        expect( result1 ).toEqual( {
+            src: 'https://player.vimeo.com/video/289836809',
+        });
+        expect( result2 ).toEqual( {
+            src: 'https://player.vimeo.com/video/289836809?title=0&byline=0&portrait=0',
+        });
+        expect( result3 ).toEqual( {
+            src: 'https://player.vimeo.com/video/289836809',
+        });
+    });
+
+});
 
 /* Can not test as there is no fetch in nodejs where playwright executes
 test.describe( 'Test iframely provider', () => {
