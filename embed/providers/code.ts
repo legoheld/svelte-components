@@ -24,7 +24,14 @@ export function code( input: string ): ReturnType<Provider> {
     const ratio = calcRatio( result.width, result.height );
     if( ratio ) result.ratio = ratio;
 
-    if( result.src ) return result as IFrameOptions;
+    
+    if( result.src ) {
+        
+        // some embed codes have the & in the source as html entity &amp;
+        result.src = result.src.replaceAll( '&amp;', '&' );
+        
+        return result as IFrameOptions;
+    }
 
     return;
 }

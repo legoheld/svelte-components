@@ -111,6 +111,16 @@ test.describe( 'Code provider', () => {
             width: "476px"
         } );
     } );
+    
+    test( '&amp; in url', () => {
+        let source = `<iframe
+        src="https://onedrive.live.com/embed?resid=39D4F0952BFC6E39%21113&amp;authkey=%21AB8p4mpdcd0aivA&amp;em=2&amp;wdAr=1.7777777777777777">
+        </iframe>`;
+        
+        expect( code( source ) ).toEqual( {
+            src: "https://onedrive.live.com/embed?resid=39D4F0952BFC6E39%21113&authkey=%21AB8p4mpdcd0aivA&em=2&wdAr=1.7777777777777777",
+        } );
+    })
 } );
 
 
