@@ -1,29 +1,26 @@
 <script>
     import "../app.css";
-  </script>
+    import { page } from '$app/stores';
 
-<nav class="bg-gray-800">
-    <div class="px-2 sm:px-6 lg:px-8">
-      <div class="relative flex h-16 items-center justify-between">
-        <div class="flex flex-1 items-center justify-center sm:items-stretch sm:justify-start">
-          <div class="sm:ml-6">
-            <div class="flex space-x-4">
-              <!-- Current: "bg-gray-900 text-white", Default: "text-gray-300 hover:bg-gray-700 hover:text-white" -->
-              <a href="/" class="bg-gray-900 text-white px-3 py-2 rounded-md text-sm font-medium" aria-current="page">Home</a>
-  
-              <a href="/embed" class="text-gray-300 hover:bg-gray-700 hover:text-white px-3 py-2 rounded-md text-sm font-medium">Embed</a>
-              <!--
-                  <a href="/test" class="text-gray-300 hover:bg-gray-700 hover:text-white px-3 py-2 rounded-md text-sm font-medium">Projects</a>
-      
-                  <a href="/test2" class="text-gray-300 hover:bg-gray-700 hover:text-white px-3 py-2 rounded-md text-sm font-medium">Calendar</a>
-              -->
-            </div>
-          </div>
-        </div>
-        
-      </div>
+
+    const navigation = [
+        { path:'/', label:'Home' },
+        { path:'/embed', label:'Embed' },
+    ]
+</script>
+
+
+
+
+<nav class="bg-gray-800 fixed top-0 left-0 bottom-0 w-64 px-6 py-8 shadow-md">
+    <div class="space-y-2">
+        {#each navigation as nav }
+            <a href="{nav.path}" class:bg-teal-900={ $page.url.pathname == nav.path } class="block text-white px-3 py-2 rounded-md text-sm font-medium">{ nav.label }</a>
+        {/each}
     </div>
-  </nav>
+        
+</nav>
   
-  
-  <slot></slot>
+<div class="ml-64 p-4">
+    <slot ></slot>
+</div>

@@ -10,6 +10,9 @@
 
     $: (async() => frameOptions = await embed( value ))();
 </script>
+
+
+
 <div>
     <label for="input" class="block text-sm font-medium text-gray-700">Input</label>
     <div>
@@ -18,7 +21,7 @@
 </div>
 
 {#if frameOptions?.src}
-<div id="options">
+<div id="options" class="font-mono text-xs">
     { JSON.stringify( frameOptions ) }
 </div>
 {/if}
