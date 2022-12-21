@@ -18,13 +18,16 @@ export interface Provider {
 
 export function create( providers: Provider[], defaults: Partial<IFrameOptions> = { ratio: 4/3, allowfullscreen: true } ) {
 
-    return async ( input, options: Partial<IFrameOptions> = {} ) => {
+    return async ( input:string|undefined, options: Partial<IFrameOptions> = {} ) => {
+
+        if( !input ) input = '';
+
         for( const provider of providers ) {
             let res = await provider( input.trim() );
             if( res ) return Object.assign( {}, defaults, options, res );
         }
 
-        return;
+        return Object.assign( {}, defaults, options );
     };
 }
 

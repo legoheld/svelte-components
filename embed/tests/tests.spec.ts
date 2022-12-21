@@ -2,7 +2,6 @@ import { expect, test } from '@playwright/test';
 import { create } from '../embed';
 import { fallback } from '../providers';
 import { code } from '../providers/code';
-import { iframely } from '../providers/iframely';
 import { quizlet } from '../providers/quizlet';
 import { vimeo } from '../providers/vimeo';
 import { youtube } from '../providers/youtube';
@@ -19,6 +18,10 @@ test.describe( 'embed', () => {
             src: 'https://my-new-domain.ch',
             ratio:0.5625
         } );
+
+
+        options = await embed( undefined );
+
     } );
 } );
 
@@ -208,23 +211,25 @@ test.describe( "test vimeo", () => {
 
 });
 
-/* Can not test as there is no fetch in nodejs where playwright executes
 test.describe( 'Test iframely provider', () => {
-    let embed = create( [
-        iframely( 'https://iframely.b.lernetz.host/' )
-    ] );
 
-    test( 'iframely youtube', async ( { } ) => {
+    test( 'iframely youtube', async ( { page } ) => {
+        await page.goto( '/embed' );
 
-        let result = await embed( 'https://www.youtube.com/watch?v=koEzP2ZE7fM' );
-        expect( result ).toEqual( {
-            src: "https://www.youtube.com/embed/koEzP2ZE7fM?feature=oembed&amp;autoplay=1",
-            width: "100%",
-            height: "600px",
-            allowfullscreen: true,
-        } );
+        // mock iframely api
+        await page.route('https://iframely.b.lernetz.host/**', async route => {
+            await route.fulfill({ 
+                body: JSON.stringify({
+                    "html": "<div><div style=\"left: 0; width: 100%; height: 400px; position: relative;\"><iframe src=\"https://w.soundcloud.com/player/?visual=true&amp;url=https%3A%2F%2Fapi.soundcloud.com%2Ftracks%2F1376352658&amp;show_artwork=true\" style=\"border: 0; top: 0; left: 0; width: 100%; height: 100%; position: absolute;\" allowfullscreen></iframe></div></div>"
+                })
+            });
+        });
+
+        // fill to invoke api call
+        await page.fill( 'input', 'url' );
+
+        expect(await page.textContent('#options')).toBe( JSON.stringify( {ratio:1.3333333333333333,allowfullscreen:true,src:"https://w.soundcloud.com/player/?visual=true&url=https%3A%2F%2Fapi.soundcloud.com%2Ftracks%2F1376352658&show_artwork=true"} ));
     } );
 } );
-*/
 
 

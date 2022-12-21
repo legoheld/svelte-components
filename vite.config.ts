@@ -1,25 +1,13 @@
-import { defineConfig } from 'vite'
-import { svelte } from '@sveltejs/vite-plugin-svelte'
-import { HstSvelte } from '@histoire/plugin-svelte'
-import sveltePreprocess from 'svelte-preprocess'
+import { sveltekit } from '@sveltejs/kit/vite';
 
-export default defineConfig({
-  plugins: [
-    svelte({
-      preprocess: [sveltePreprocess({ typescript: true })]
-    }),
-  ],
-  histoire: {
-    plugins: [
-      HstSvelte(),
-    ],
-    tree: {
-      groups: [
-        {
-          id: 'top',
-          title: 'Hallo',
-        },
-      ],
-    },
-  },
-})
+/** @type {import('vite').UserConfig} */
+const config = {
+	plugins: [sveltekit( )],
+	server: {
+		fs: {
+			allow: ['.']
+		}
+	}
+};
+
+export default config;
