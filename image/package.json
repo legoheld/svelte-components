@@ -6,7 +6,7 @@
   "devDependencies": {},
   "scripts": {
     "test": "npx playwright test",
-    "test-ct": "playwright test -c ../../playwright-ct.config.ts"
+    "test-ct": "playwright test -c ../.playwright/ct.config.ts"
   },
   "repository": {
     "type": "git",
