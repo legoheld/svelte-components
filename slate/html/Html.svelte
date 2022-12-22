@@ -2,26 +2,22 @@
 
     import { Element as SlateElement, Text as SlateText } from "slate";
 
-    export interface Nodes {
+    export interface Types {
         [key:string]:ConstructorOfATypedSvelteComponent;
     }
 
-    export function resolveNode( element:SlateText|SlateElement ) {
-        let html = getContext<HtmlContext>( 'html' );
-        return html.nodes[ ( SlateText.isText( element ) ) ? 'text' : element.type ];
-    }
-
     export interface HtmlContext {
-        nodes:Nodes,
+        types:Types,
         register: ( path:number[], n:Node ) => void,
     }
 
-    export function registerElement( node:Node, args:{ path:number[], html:HtmlContext } ) {
-        args.html.register( args.path, node );
+    export function resolveType( element:SlateText|SlateElement ) {
+        let html = getContext<HtmlContext>( 'html' );
+        return html.types[ ( SlateText.isText( element ) ) ? 'text' : element.type ];
     }
-    export function registerText( node:Node, args:{ path:number[], html:HtmlContext } ) {
-        // extract text node
-        args.html.register( args.path, node.childNodes[0] );
+
+    export function getRegister() {
+        return getContext<HtmlContext>( 'html' ).register;
     }
 
 </script>
@@ -29,9 +25,10 @@
 
 <script lang="ts">
     import { getContext, setContext } from "svelte";
-    import { nodes as defaultNodes } from "./defaults";
+    import { types as defaultTypes } from "./defaults";
+    import Children from "./types/Children.svelte";
 
-    export let nodes:Nodes = defaultNodes;
+    export let types:Types = defaultTypes;
 
     export let content:Array<SlateElement>;
     let domPath:Map<Node,number[]> = new Map();
@@ -39,7 +36,7 @@
 
 
     setContext( 'html', {
-        nodes,
+        types,
         register: ( path:number[], n:Node ) => {
             pathDom.set( path.join( ',' ), n );
             domPath.set( n, path );
@@ -56,6 +53,4 @@
 
 </script>
 
-{#each content as element, index}
-    <svelte:component this={resolveNode( element )} element={element} path={ [ index ] }></svelte:component>
-{/each}
+<Children element={{children:content}} path={[]}></Children>

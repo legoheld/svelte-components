@@ -1,17 +1,11 @@
-<script lang="ts" context="module">
-    export function rootNode( n:Node ) {
-        const root = n.getRootNode();
-        if( ( root instanceof Document || root instanceof ShadowRoot) && root['getSelection'] != null ) return root;
-        return n.ownerDocument;
-    }
-</script>
-
 <script lang="ts">
-    import { Element, Range, Selection } from "slate";
+    import type { Selection } from "slate";
+    import { Element, Range } from "slate";
 
     import { onMount } from "svelte";
-    import { nodes as defaultNodes } from "../html/defaults";
+    import { types as defaultTypes } from "../html/defaults";
     import Html from "../html/Html.svelte";
+    import { rootNode } from './utils';
     import { Editor as BaseEditor } from './Editor';
 
 
@@ -20,12 +14,10 @@
 
     export let content:Element[];
     export let editor:BaseEditor;
-    export let selection:Selection;
-    export let nodes = defaultNodes;
+    export let selection:Selection = undefined;
+    export let types = defaultTypes;
 
     onMount( () => {
-
-        editor.slate.children = content;
 
         let root = rootNode( ref ) as Document;
         editor.dom = {
@@ -44,11 +36,19 @@
 
     })
 
+    $: {
+        editor.slate.selection = selection;
+        editor.slate.children = content;
+    }
+
+
 
     /**
      * Turns a native selection into a slate selection
      */
     function getSelection():Range {
+
+        if( !ref ) return;
 
         let root = rootNode( ref ) as Document;
         let selection = root.getSelection();
@@ -101,6 +101,7 @@
         domSelection.addRange( range );
     }
 
+  
 
 </script>
 
@@ -112,5 +113,5 @@
     on:compositionend={editor.events.onCompositionEnd}
     on:paste={editor.events.onPaste}
     on:cut={editor.events.onCut}>
-    <Html bind:content bind:this={html} nodes={nodes}></Html>
+    <Html bind:this={html} types={types} content={content}></Html>
 </div>

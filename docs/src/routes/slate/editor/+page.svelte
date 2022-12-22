@@ -1,0 +1,52 @@
+<script lang="ts">
+    import type { Selection } from "slate";
+    import { Editor } from '@lernetz/svelte-slate';
+    import { defaultEditor } from '@lernetz/svelte-slate/defaults';
+    import { generate } from "../textGenerator";
+    
+    let content:any[] = [
+        { type:'p', children: [
+            { text:"Paragraph " },
+            { text:"Demo" }
+        ]},
+    ];
+
+    let editor = defaultEditor();
+    let selection:Selection = undefined;
+
+    let isBold:boolean = false;
+    let isItalic:boolean = false;
+    let isUL:boolean = false;
+    let isOL:boolean = false;
+
+    $:{
+        // change on selection
+        let test = selection;
+        isBold = editor.isStyleActive( 'bold' );
+        isItalic = editor.isStyleActive( 'italic' );
+        isOL = editor.isTypeActive( 'ol' );
+        isUL = editor.isTypeActive( 'ul' );
+    }
+
+
+    function randomText() {
+        selection = undefined;
+        content = generate( { type:'p', mode:'paragraph', num:10 } );
+    }
+    
+    
+</script>
+
+<button on:click={ () => randomText() }>Random Text</button>
+<hr>
+<div on:mousedown={ e => e.preventDefault() }>
+    <button class:bg-red-400={ isBold } on:click={ () => editor.toggleStyle( 'bold' ) }>bold</button>
+    <button class:bg-red-400={ isItalic } on:click={ () => editor.toggleStyle( 'italic' ) }>italic</button>
+    <button class:bg-red-400={ isUL } on:click={ () => editor.toggleType( 'ul' ) }>ul</button>
+    <button class:bg-red-400={ isOL } on:click={ () => editor.toggleType( 'ol' ) }>ol</button>
+</div>
+<hr>
+
+<Editor content={content} bind:editor bind:selection></Editor>
+    
+    
