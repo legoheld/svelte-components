@@ -1,7 +1,7 @@
 {
-  "name": "@lernetz/model-api",
+  "name": "@lernetz/svelte-slate",
   "version": "1.0.0",
-  "description": "A module to communicate with the Model API package for laravel",
+  "description": "A slate frontend rendered with svelte",
   "main": "index.ts",
   "scripts": {
     "test": "npx playwright test"
@@ -11,7 +11,9 @@
     "url": "https://gitlab.lernetz.ch/lfw/svelte-components.git"
   },
   "dependencies": {
-    "svelte": "^3.0.0"
+    "is-hotkey": "^0.2.0",
+    "is-url": "^1.2.4",
+    "slate": "^0.87.0"
   },
   "author": "",
   "license": "ISC"

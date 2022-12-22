@@ -17,29 +17,36 @@ test:
     - npm run test
 
 
-
 common_publish:
   extends: .publish
-  only:
-    changes:
-      - "common/**/*"  
+  rules:
+    - changes: 
+      - common/package.json
   script:
     - npm -w common publish
 
 
 translate_publish:
   extends: .publish
-  only:
-    changes:
-      - "translate/**/*"  
+  rules:
+    - changes: 
+      - translate/package.json
   script:
     - npm -w translate publish
 
 
 request_publish:
   extends: .publish
-  only:
-    changes:
-      - "request/**/*"  
+  rules:
+    - changes: 
+      - request/package.json
   script:
     - npm -w request publish
+
+embed_publish:
+  extends: .publish
+  rules:
+    - changes: 
+      - embed/package.json
+  script:
+    - npm -w embed publish

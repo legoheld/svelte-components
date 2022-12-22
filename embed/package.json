@@ -1,0 +1,24 @@
+{
+  "name": "@lernetz/embed",
+  "version": "1.0.8",
+  "description": "Small package that generates the embed code from an input string. Different providers will generate the iframe options for the final iframe",
+  "main": "embed.ts",
+  "scripts": {
+    "test": "npx playwright test"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://gitlab.lernetz.ch/lfw/svelte-components.git"
+  },
+  "dependencies": {
+    "svelte": "^3.0.0"
+  },
+  "author": "",
+  "license": "ISC",
+  "directories": {
+    "test": "tests"
+  },
+  "devDependencies": {
+    "@playwright/test": "^1.27.1"
+  }
+}

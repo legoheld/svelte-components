@@ -1,114 +1,118 @@
 import { depthFirst } from "@lernetz/common";
 import { RequestBuilder } from "@lernetz/request";
-
+import { get, writable, Writable } from 'svelte/store';
+import { isWritable } from './guards';
 
 
 export class ModelGateway {
 
-    base:RequestBuilder;
-    in:( data:any ) => any;
-    out:( data:any ) => any;
+    base: RequestBuilder;
+    in: ( data: { modelName: string; } ) => any;
+    out: ( data: Writable<any> ) => any;
 
-    constructor( config:Partial<ModelGateway> ) {
-        Object.assign( this, config );
+    constructor( config: Partial<ModelGateway> ) {
+        Object.assign( this, { in: noop, out: noop, ...config } );
     }
 
 
 
     query<Type extends DBModel[] = DBModel[]>( queryObject: QueryObject ) {
         return this.base
-                .jsonApi( "query", queryObject )
-                .then<Type>( ( res ) => this.in( res ) );
+            .jsonApi( "query", queryObject )
+            .then<Type>( ( res ) => traverseIn( res, this.in ) );
     }
 
 
 
     create<Type extends DBModel = DBModel>( model: {
-        [key: string]: any;
+        [ key: string ]: any;
         modelName: string;
     }, relations: object = {} ) {
         return this.base
-            .jsonApi( "create", { model: this.out( model ), relations } )
-            .then<Type>( ( res ) => this.in( res ) );
+            .jsonApi( "create", { model: traverseOut( model, this.out ), relations } )
+            .then<Type>( ( res ) => traverseIn( res, this.in ) );
     }
 
 
 
-    update<Type extends DBModel = DBModel>( model: Type, newValues: { [name: string]: any } ) {
+    update<Type extends DBModel = DBModel>( model: Type, newValues: { [ name: string ]: any; } ) {
         let oldValues = {};
 
         Object.keys( newValues ).forEach( ( key ) => {
+
+            let ref = get( model );
+
             // get old value from model
-            oldValues[key] =model[key];
+            oldValues[ key ] = ref[ key ];
 
             // as we have to previous value, we can apply it on the model
-            model[key] = newValues[key];
+            ref[ key ] = newValues[ key ];
+            model.set( ref ); // update svelte store
 
             // reduce values for transmission
-            newValues[key] = reduceModels( newValues[ key ] );
-            oldValues[key] = reduceModels( oldValues[ key ] );
+            newValues[ key ] = reduceModels( newValues[ key ] );
+            oldValues[ key ] = reduceModels( oldValues[ key ] );
 
         } );
 
         return this.base
-                .jsonApi( "update", this.out( {
-                    model: reduceModels( model ),
-                    newValues,
-                    oldValues,
-                }))
-                .then<Type>( ( res: any ) => {
-                    // apply tranformations
-                    res = this.in( res );
-    
-                    // return original model
-                    return model;
-                } );
+            .jsonApi( "update", traverseOut( {
+                model: reduceModels( traverseOut( model, this.out ) ),
+                newValues,
+                oldValues,
+            }, this.out ) )
+            .then<Type>( ( res: any ) => {
+                // apply tranformations
+                res = traverseIn( res, this.in );
+
+                // return original model
+                return model;
+            } );
     }
 
 
 
     delete<Type extends DBModel = DBModel>( model: Type ) {
         return this.base
-                .jsonApi( "delete", this.out( { model:reduceModels( model ) } ) )
-                .then<Type>( ( res ) => this.in( res ) )
+            .jsonApi( "delete", traverseOut( { model: reduceModels( model ) }, this.out ) )
+            .then<Type>( ( res ) => traverseIn( res, this.in ) );
     }
-            
 
 
-    
+
+
     restore<Type extends DBModel = DBModel>( model: Type ) {
         return this.base
-                .jsonApi( "restore", this.out( { model:reduceModels( model ) } ) )
-                .then<Type>( ( res ) => this.in( res ) )
+            .jsonApi( "restore", traverseOut( { model: reduceModels( model ) }, this.out ) )
+            .then<Type>( ( res ) => traverseIn( res, this.in ) );
     }
 
 
 
     clone<Type extends DBModel = DBModel>( model: Type ) {
         return this.base
-                .jsonApi( "copy", this.out( { model:reduceModels( model ) } ) )
-                .then<Type>( ( res ) => this.in( res ) )
+            .jsonApi( "copy", traverseOut( { model: reduceModels( model ) }, this.out ) )
+            .then<Type>( ( res ) => traverseIn( res, this.in ) );
     }
 
 
 }
 
 
-
-export interface DBModel {
-    modelName: string;
+export type DBModel = Writable<{
+    modelName: string,
     id: string;
-}
+}>;
 
 export interface QueryObject {
     where: {
         modelName: string;
-        [key: string]: any
+        [ key: string ]: any;
     },
     relations?: object,
     sort?: {
         attribute: string,
-        order?: string
+        order?: string;
     },
     offset?: number,
     limit?: number,
@@ -117,9 +121,41 @@ export interface QueryObject {
 
 
 function reduceModels( obj: any ) {
-    depthFirst( obj, ( i ) => {
+    return depthFirst( obj, ( i ) => {
         return ( i?.id && i?.modelName ) ? { id: i.id, modelName: i.modelName } : i;
-    });
+    } );
 }
 
+
+function traverseIn( d: any, inFunc: ( d: any ) => any ) {
+    return depthFirst( d, ( i ) => {
+        // handle model files
+        if( i?.modelName ) {
+            // invoke use function to create custom stores or model adjustments
+            i = inFunc( i );
+            // turn into store
+            if( !isWritable( i ) ) i = writable( i );
+        }
+
+        return i;
+    } );
+}
+
+
+function traverseOut( d: any, outFunc: ( d: any ) => any ) {
+    return depthFirst( d, ( i ) => {
+        // handle stores
+        if( isWritable( i ) ) {
+            // invoke user function to adjust model to backend
+            i = outFunc( i );
+            // unwrap store
+            if( isWritable( i ) ) i = get( i );
+        }
+
+        return i;
+    } );
+}
+
+
+const noop = ( d ) => d;
 
