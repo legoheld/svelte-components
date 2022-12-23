@@ -17,12 +17,12 @@ export let item:INavItem;
 
 
 {#if item.path }
-    <a href="{item.path}" class:bg-teal-900={ $page.url.pathname == item.path } class="block text-white px-3 py-2 rounded-md text-sm font-medium">{ item.label }</a>
+    <a href="{item.path}" class:bg-teal-900={ $page.url.pathname == item.path } class="block text-white px-12 py-8 rounded-md text-14 font-medium">{ item.label }</a>
 {:else }
-    <div class="text-white px-3 py-2 rounded-md text-sm font-medium">
+    <div class="text-white px-12 py-8 rounded-md text-14 font-medium">
         { item.label }
     </div>
-    <div class="pl-2">
+    <div class="pl-8">
         {#each item.children as child }
             <svelte:self item={child}/>
         {/each}

@@ -37,19 +37,19 @@
     
 </script>
 
-<button on:click={ () => randomText() }>Random Text</button>
-<hr>
+<button class="bg-blue-600 text-white text-14 px-8 py-4" on:click={ () => randomText() }>Random Text</button>
+<hr class="my-12">
 <div on:mousedown={ e => e.preventDefault() }>
     <button class:bg-red-400={ isBold } on:click={ () => editor.toggleStyle( 'bold' ) }>bold</button>
     <button class:bg-red-400={ isItalic } on:click={ () => editor.toggleStyle( 'italic' ) }>italic</button>
     <button class:bg-red-400={ isUL } on:click={ () => editor.toggleType( 'ul' ) }>ul</button>
     <button class:bg-red-400={ isOL } on:click={ () => editor.toggleType( 'ol' ) }>ol</button>
 </div>
-<hr>
+<hr class="my-12">
 
 <Editor content={content} bind:editor bind:selection></Editor>
 
-<hr>
+<hr class="my-12">
 { JSON.stringify( selection ) }
 
     
