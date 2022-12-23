@@ -12,7 +12,7 @@ function randomText() {
 
 </script>
 
-<button on:click={ e => randomText() } class="bg-blue-600 text-white text-sm">Random Text</button>
+<button on:click={ e => randomText() } class="bg-blue-600 text-white text-14 px-8 py-4">Random Text</button>
 
 <Html bind:content></Html>
 

@@ -10,6 +10,12 @@
             { path:'/slate/html', label:'Html'},
             { path:'/slate/editor', label:'Editor'},
         ] },
+        { label:'UI', children:[
+            { path:'/ui/input', label:'Input'},
+        ] },
+        { label:'ModelAPI', children:[
+            { path:'/model-api/attribute', label:'Attribute'},
+        ] },
         {
             path:"/image", label:"Image"
         }
@@ -19,8 +25,8 @@
 
 
 
-<nav class="bg-gray-800 fixed top-0 left-0 bottom-0 w-64 px-6 py-8 shadow-md">
-    <div class="space-y-2">
+<nav class="bg-gray-800 fixed top-0 left-0 bottom-0 w-256 px-24 py-32 shadow-md">
+    <div class="space-y-8">
         {#each navigation as nav }
             <NavItem item={nav}></NavItem>
         {/each}
@@ -28,6 +34,6 @@
         
 </nav>
   
-<div class="ml-64 p-4">
+<div class="ml-256 p-16">
     <slot ></slot>
 </div>

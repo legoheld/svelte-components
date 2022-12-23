@@ -1,0 +1,15 @@
+{
+  "name": "@lernetz/svelte-input",
+  "version": "1.0.0",
+  "description": "A tailwind ui style Input component.",
+  "main": "index.ts",
+  "scripts": {
+    "test": "npx playwright test"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://gitlab.lernetz.ch/lfw/svelte-components.git"
+  },
+  "author": "",
+  "license": "ISC"
+}

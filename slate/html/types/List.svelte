@@ -6,6 +6,6 @@
     export let path:number[];
 </script>
 
-<svelte:element this={element.type} class="{ element.type == 'ul' ? 'list-disc' : 'list-decimal' } list-outside pl-4">
+<svelte:element this={element.type} class="{ element.type == 'ul' ? 'list-disc' : 'list-decimal' } list-outside pl-20">
     <Children path={path} element={element}></Children>
 </svelte:element>
