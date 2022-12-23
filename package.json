@@ -12,13 +12,15 @@
     "translate",
     "image",
     "slate",
-    "embed"
+    "embed",
+    "ui/input"
   ],
   "type": "module",
   "devDependencies": {
     "@playwright/test": "^1.28.1",
     "@sveltejs/adapter-static": "^1.0.0",
     "@sveltejs/kit": "^1.0.0",
+    "@tailwindcss/forms": "^0.5.3",
     "autoprefixer": "^10.4.13",
     "lorem-ipsum": "^2.0.8",
     "postcss": "^8.4.20",

@@ -3,6 +3,7 @@ module.exports = {
   content: [
     './docs/**/*.{html,js,svelte,ts}',
     './slate/**/*.{html,js,svelte,ts}',
+    './ui/**/*.{html,js,svelte,ts}',
   ],
   theme: {
     // overwrite spacing to pixel units
@@ -61,5 +62,9 @@ module.exports = {
     extend: {
     },
   },
-  plugins: [],
+  plugins: [
+    require("@tailwindcss/forms")({
+      strategy: 'base', // only generate global styles
+    }),
+  ],
 }

@@ -10,6 +10,9 @@
             { path:'/slate/html', label:'Html'},
             { path:'/slate/editor', label:'Editor'},
         ] },
+        { label:'UI', children:[
+            { path:'/ui/input', label:'Input'},
+        ] },
     ]
 </script>
 
