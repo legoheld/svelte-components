@@ -1,5 +1,11 @@
 <script lang="ts">
     import { Input } from '@lernetz/svelte-input';
+    import { writable } from 'svelte/store';
+
+    let value = writable('');
 </script>
 
-<Input on:change={ e => console.log( e.detail ) } label="demo"></Input>
+<Input bind:value label="demo"></Input>
+
+
+{$value}

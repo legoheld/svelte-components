@@ -13,6 +13,9 @@
         { label:'UI', children:[
             { path:'/ui/input', label:'Input'},
         ] },
+        { label:'ModelAPI', children:[
+            { path:'/model-api/attribute', label:'Attribute'},
+        ] },
         {
             path:"/image", label:"Image"
         }

@@ -13,6 +13,7 @@
     "image",
     "slate",
     "embed",
+    "model-api",
     "ui/input"
   ],
   "type": "module",
