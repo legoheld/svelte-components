@@ -1,6 +1,7 @@
 <script context="module" lang="ts">
 
     import { Element as SlateElement, Text as SlateText } from "slate";
+    import type { Descendant } from "slate";
 
     export interface Types {
         [key:string]:ConstructorOfATypedSvelteComponent;
@@ -30,7 +31,7 @@
 
     export let types:Types = defaultTypes;
 
-    export let content:Array<SlateElement>;
+    export let content:Descendant[];
     let domPath:Map<Node,number[]> = new Map();
     let pathDom:Map<string,Node> = new Map();
 

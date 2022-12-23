@@ -1,8 +1,10 @@
 <script lang="ts">
-    import type { Selection } from "slate";
+    import type { Descendant, Selection } from "slate";
     import { Element, Range } from "slate";
 
     import { onMount } from "svelte";
+    import { writable } from "svelte/store";
+    import type { Writable } from "svelte/store";
     import { types as defaultTypes } from "../html/defaults";
     import Html from "../html/Html.svelte";
     import { rootNode } from './utils';
@@ -11,21 +13,35 @@
 
     let html:Html;
     let ref:Node;
+    let mute:boolean;
 
-    export let content:Element[];
+    export let content:Writable<Descendant[]> = writable();
     export let editor:BaseEditor;
     export let selection:Selection = undefined;
     export let types = defaultTypes;
 
     onMount( () => {
 
+        // keep slate model update with content
+        content.subscribe( value => {
+            if( !mute ) editor.slate.selection = undefined;
+            editor.slate.children = value;
+        });
+
+
         let root = rootNode( ref ) as Document;
         editor.dom = {
             getSelection,
             setSelection,
-            onChange: ( c ) => {
-                selection = editor.slate.selection;
-                content = c;
+            updateContent: ( c ) => {
+                mute = true;
+                console.log("Update content from slate");
+                $content = c;
+                mute = false;
+            },
+            updateSelection: (s) => {
+                console.log("Update selection from slate");
+                selection = s;
             }
         }
 
@@ -36,17 +52,12 @@
 
     })
 
-    $: {
-        editor.slate.selection = selection;
-        editor.slate.children = content;
-    }
-
 
 
     /**
      * Turns a native selection into a slate selection
      */
-    function getSelection():Range {
+    function getSelection():Selection {
 
         if( !ref ) return;
 
@@ -75,7 +86,7 @@
     }
 
 
-    function setSelection( r:Range ) {
+    function setSelection( r:Selection ) {
 
         if( !r ) return;
 
@@ -113,5 +124,5 @@
     on:compositionend={editor.events.onCompositionEnd}
     on:paste={editor.events.onPaste}
     on:cut={editor.events.onCut}>
-    <Html bind:this={html} types={types} content={content}></Html>
+    <Html bind:this={html} types={types} content={$content}></Html>
 </div>

@@ -1,9 +1,10 @@
-import { createEditor, Editor as SlateEditor, Element, Range } from 'slate';
+import { createEditor, Descendant, Editor as SlateEditor, Element, Range, Selection } from 'slate';
 
 export interface DomContract {
     getSelection: () => Range;
-    setSelection: ( r: Range ) => void;
-    onChange: ( content: Element[] ) => void;
+    setSelection: ( r: Selection ) => void;
+    updateSelection:( c:Selection ) => void;
+    updateContent:( c:Descendant[] ) => void;
 }
 
 export interface EditorPlugin<TOut, TIn extends Editor = Editor> {
@@ -27,6 +28,8 @@ export class Editor {
     events: EditorEvents;
     dom: DomContract;
 
+    private oldContent:Descendant[];
+
     constructor() {
         this.slate = createEditor();
         this.events = {
@@ -37,15 +40,23 @@ export class Editor {
             onPaste: ( e: ClipboardEvent ) => { },
             onCut: ( e: ClipboardEvent ) => { },
             onSelectionChange: ( e: Event ) => { },
-            onSlateChange: () => {
-                this.dom.onChange( JSON.parse( JSON.stringify( this.slate.children ) ) );
-            }
+            onSlateChange: () => {}
         };
 
         // trigger slate changes
         this.slate.onChange = () => {
+
+            // check if content has chnaged
+            let newContent = this.slate.children;
+            if( this.oldContent != newContent ) {
+                this.dom.updateContent( newContent );
+                this.oldContent = newContent;
+            }
+
+            // trigger event for plugins
             this.events.onSlateChange();
         };
+
     }
 
     plugin<B>( plugin: EditorPlugin<B, this> ) {

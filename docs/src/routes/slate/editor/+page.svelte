@@ -3,13 +3,14 @@
     import { Editor } from '@lernetz/svelte-slate';
     import { defaultEditor } from '@lernetz/svelte-slate/defaults';
     import { generate } from "../textGenerator";
+    import { writable } from 'svelte/store';
     
-    let content:any[] = [
+    let content = writable([
         { type:'p', children: [
             { text:"Paragraph " },
             { text:"Demo" }
         ]},
-    ];
+    ]);
 
     let editor = defaultEditor();
     let selection:Selection = undefined;
@@ -20,6 +21,7 @@
     let isOL:boolean = false;
 
     $:{
+        console.log( "Update page selection", selection );
         // change on selection
         let test = selection;
         isBold = editor.isStyleActive( 'bold' );
@@ -30,8 +32,7 @@
 
 
     function randomText() {
-        selection = undefined;
-        content = generate( { type:'p', mode:'paragraph', num:10 } );
+        $content = generate( { type:'p', mode:'paragraph', num:1 } );
     }
     
     
@@ -48,5 +49,9 @@
 <hr>
 
 <Editor content={content} bind:editor bind:selection></Editor>
+
+<hr>
+{ JSON.stringify( selection ) }
+
     
     
