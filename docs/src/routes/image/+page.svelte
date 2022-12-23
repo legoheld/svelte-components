@@ -1,9 +1,6 @@
-<Image route={route} image={image} sizes={sizes}></Image>
-
 <script lang="ts">
-
+    import Image from "@lernetz/svelte-image";
     import { RequestBuilder } from "@lernetz/request";
-    import Image from "../Image.svelte";
 
     const route = new RequestBuilder({
         url:"https://assets.test.b.lernetz.host/svelte-img-test/convert/{file_name}.{ext}/o/height={height}&width={width}/responsive.jpg"
@@ -24,3 +21,5 @@
     }
 
 </script>
+
+<Image alt="test" route={route} image={image} sizes={sizes}></Image>

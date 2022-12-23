@@ -10,6 +10,9 @@
             { path:'/slate/html', label:'Html'},
             { path:'/slate/editor', label:'Editor'},
         ] },
+        {
+            path:"/image", label:"Image"
+        }
     ]
 </script>
 

@@ -1,14 +1,20 @@
-import { test, expect } from '@playwright/experimental-ct-svelte';
-import TestImage from './TestImage.svelte';
-
-test.use({ viewport: { width: 1024, height: 768 } });
+import { test, expect } from '@playwright/test';
 
 test.describe('Test image', () => {
 
-    test('should work', async ({ mount }) => {
-        const component = await mount(TestImage );
-        await expect(component).toHaveAttribute('alt', 'test.jpg');
-        await expect(component).toHaveAttribute('sizes', "(max-width: 480px) 300px,(max-width: 1024px) 600px,1000px");
+    test.only( 'desktop', async ( { page } ) => {
+        await page.setViewportSize( {
+            width: 1024,
+            height: 768
+        } );
+
+        await page.waitForLoadState('domcontentloaded');
+        await page.goto( '/image' );
+
+        const img = await page.getByAltText('test.jpg');
+        await expect(img).toHaveAttribute('alt', 'test.jpg');
+        await expect(img).toHaveAttribute('sizes', "(max-width: 480px) 300px,(max-width: 1024px) 600px,1000px");
+
     });
 
 });

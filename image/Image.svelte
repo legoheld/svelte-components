@@ -50,7 +50,7 @@
     function setSrcSet(){
         let srcset = "";
         for( const key in sizes ){
-            srcset += `${route.vars( { width:sizes[key], height:heightAccordingToWidthAndRatio( sizes[key], ratio ), file_name:image.file_name, ext:image.ext } ).url}, `;
+            srcset += `${route.vars( { width:sizes[key], height:heightAccordingToWidthAndRatio( sizes[key], ratio ), file_name:image.file_name, ext:image.ext } ).url} ${sizes[key]}w, `;
         }
 
         img.setAttribute( 'srcset', srcset.substring(0, srcset.length - 2) );
