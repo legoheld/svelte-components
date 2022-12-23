@@ -13,6 +13,9 @@
         { label:'UI', children:[
             { path:'/ui/input', label:'Input'},
         ] },
+        {
+            path:"/image", label:"Image"
+        }
     ]
 </script>
 
