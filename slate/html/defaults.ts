@@ -1,9 +1,9 @@
-import Type from './nodes/Type.svelte';
-import Link from './nodes/Link.svelte';
-import Text from './nodes/Text.svelte';
-import List from './nodes/List.svelte';
+import Type from './types/Type.svelte';
+import Link from './types/Link.svelte';
+import Text from './types/Text.svelte';
+import List from './types/List.svelte';
 
-export const nodes = {
+export const types = {
     'p': Type,
     'ul': List,
     'ol': List,

@@ -5,20 +5,22 @@ import { Cut, Delete, Hotkey, Insert, Link, List, Paste, Selection, Style, Type 
 
 
 // default editor with all plugins enabled
-export const editor = new Editor()
-    .plugin( Selection )
-    .plugin( Insert )
-    .plugin( Delete )
-    .plugin( Paste )
-    .plugin( Style )
-    .plugin( Type )
-    .plugin( List )
-    .plugin( Cut )
-    .plugin( Hotkey( {
-        'mod+b': ( e ) => e.toggleStyle( 'bold' ),
-        'shift+enter': ( e ) => e.insertText( '\n' ),
-    } ) )
-    .plugin( Link );
+export function defaultEditor() {
+    return new Editor()
+       .plugin( Selection )
+       .plugin( Insert )
+       .plugin( Delete )
+       .plugin( Paste )
+       .plugin( Style )
+       .plugin( Type )
+       .plugin( List )
+       .plugin( Cut )
+       .plugin( Hotkey( {
+           'mod+b': ( e ) => e.toggleStyle( 'bold' ),
+           'shift+enter': ( e ) => e.insertText( '\n' ),
+       } ) )
+       .plugin( Link );
+}
 
 
 

@@ -1,39 +1,49 @@
-<script lang="ts" context="module">
-    export function rootNode( n:Node ) {
-        const root = n.getRootNode();
-        if( ( root instanceof Document || root instanceof ShadowRoot) && root['getSelection'] != null ) return root;
-        return n.ownerDocument;
-    }
-</script>
-
 <script lang="ts">
-    import { Element, Range, Selection } from "slate";
+    import type { Descendant, Selection } from "slate";
+    import { Element, Range } from "slate";
 
     import { onMount } from "svelte";
-    import { nodes as defaultNodes } from "../html/defaults";
+    import { writable } from "svelte/store";
+    import type { Writable } from "svelte/store";
+    import { types as defaultTypes } from "../html/defaults";
     import Html from "../html/Html.svelte";
+    import { rootNode } from './utils';
     import { Editor as BaseEditor } from './Editor';
 
 
     let html:Html;
     let ref:Node;
+    let skipNextUpdate:boolean;
 
-    export let content:Element[];
+    export let content:Descendant[];
     export let editor:BaseEditor;
-    export let selection:Selection;
-    export let nodes = defaultNodes;
+    export let selection:Selection = undefined;
+    export let types = defaultTypes;
 
     onMount( () => {
 
-        editor.slate.children = content;
+        // keep slate model update with content
+        /*
+        content.subscribe( value => {
+            if( !mute ) editor.slate.selection = undefined;
+            editor.slate.children = value;
+        });
+        */
+
 
         let root = rootNode( ref ) as Document;
         editor.dom = {
             getSelection,
             setSelection,
-            onChange: ( c ) => {
-                selection = editor.slate.selection;
+            updateContent: ( c ) => {
+
+                // to break the next update in the `$: {}` expression we will flag 
+                // otherwise it will set selection to undefined, that should only be happen when setting content from outside!
+                skipNextUpdate = true;
                 content = c;
+            },
+            updateSelection: (s) => {
+                selection = s;
             }
         }
 
@@ -45,10 +55,24 @@
     })
 
 
+
+    $: {
+        // TODO: Optimize 
+        // Is there a way to update a prop from inside without dirty it, so it will not execute this statement.
+        // the editor.slate.selection should only be reset/undefined when changing the content from outside.
+        if( skipNextUpdate ) {
+            skipNextUpdate = false;
+        } else {
+            editor.slate.selection = selection = undefined;
+            editor.slate.children = content;
+        }
+    }
     /**
      * Turns a native selection into a slate selection
      */
-    function getSelection():Range {
+    function getSelection():Selection {
+
+        if( !ref ) return;
 
         let root = rootNode( ref ) as Document;
         let selection = root.getSelection();
@@ -75,7 +99,7 @@
     }
 
 
-    function setSelection( r:Range ) {
+    function setSelection( r:Selection ) {
 
         if( !r ) return;
 
@@ -101,6 +125,7 @@
         domSelection.addRange( range );
     }
 
+  
 
 </script>
 
@@ -112,5 +137,5 @@
     on:compositionend={editor.events.onCompositionEnd}
     on:paste={editor.events.onPaste}
     on:cut={editor.events.onCut}>
-    <Html bind:content bind:this={html} nodes={nodes}></Html>
+    <Html bind:this={html} types={types} content={content}></Html>
 </div>

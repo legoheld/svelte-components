@@ -1,6 +1,6 @@
 import { expect, test } from '@playwright/test';
 import { create } from '../embed';
-import { fallback } from '../providers';
+import { fallback, iframely } from '../providers';
 import { code } from '../providers/code';
 import { quizlet } from '../providers/quizlet';
 import { vimeo } from '../providers/vimeo';

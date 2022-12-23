@@ -1,4 +1,4 @@
-import { Range, Transforms } from "slate";
+import { Range, Selection, Transforms } from "slate";
 import { tick } from "svelte";
 import { Editor } from "../Editor";
 
@@ -25,6 +25,7 @@ export interface SelectEditor {
 export function Selection( base: Editor ) {
 
     const editor = base as Editor & SelectEditor;
+    let oldSelection;
 
 
     // METHODS
@@ -65,14 +66,7 @@ export function Selection( base: Editor ) {
 
 
     editor.isSelectionSync = () => {
-
-        let dom = editor.dom.getSelection();
-        let slate = editor.slate.selection;
-
-        if( Range.isRange( dom ) && Range.isRange( slate ) ) return Range.equals( dom, slate );
-
-        return dom == slate;
-
+        return compareSelection( editor.dom.getSelection(), editor.slate.selection );
     };
 
 
@@ -90,15 +84,31 @@ export function Selection( base: Editor ) {
 
     // add selection rendering after change
     events.onSlateChange = async () => {
-        // will rerender content
+
         onSlateChange();
-        // svelte component content is only updated after tick
-        await tick();
-        // update selection to dom after slate change
-        editor.selectionToDom();
+
+        // check if selection has change
+        if( !compareSelection( oldSelection, editor.slate.selection ) ) {
+            // update selection to the outside
+            editor.dom.updateSelection( editor.slate.selection );
+            // svelte component content is only updated after tick
+            await tick();
+            // update selection to dom after slate change
+            editor.selectionToDom();
+        }
     };
 
     return editor;
+}
+
+
+function compareSelection( a:Selection, b:Selection ) {
+
+    // compare ranges
+    if( Range.isRange( a ) && Range.isRange( b ) ) return Range.equals( a, b );
+
+    // compare if both are null or different
+    return a == b;
 }
 
 
