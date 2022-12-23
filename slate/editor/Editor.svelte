@@ -13,9 +13,9 @@
 
     let html:Html;
     let ref:Node;
-    let mute:boolean;
+    let skipNextUpdate:boolean;
 
-    export let content:Writable<Descendant[]> = writable();
+    export let content:Descendant[];
     export let editor:BaseEditor;
     export let selection:Selection = undefined;
     export let types = defaultTypes;
@@ -23,10 +23,12 @@
     onMount( () => {
 
         // keep slate model update with content
+        /*
         content.subscribe( value => {
             if( !mute ) editor.slate.selection = undefined;
             editor.slate.children = value;
         });
+        */
 
 
         let root = rootNode( ref ) as Document;
@@ -34,13 +36,13 @@
             getSelection,
             setSelection,
             updateContent: ( c ) => {
-                mute = true;
-                console.log("Update content from slate");
-                $content = c;
-                mute = false;
+
+                // to break the next update in the `$: {}` expression we will flag 
+                // otherwise it will set selection to undefined, that should only be happen when setting content from outside!
+                skipNextUpdate = true;
+                content = c;
             },
             updateSelection: (s) => {
-                console.log("Update selection from slate");
                 selection = s;
             }
         }
@@ -54,6 +56,17 @@
 
 
 
+    $: {
+        // TODO: Optimize 
+        // Is there a way to update a prop from inside without dirty it, so it will not execute this statement.
+        // the editor.slate.selection should only be reset/undefined when changing the content from outside.
+        if( skipNextUpdate ) {
+            skipNextUpdate = false;
+        } else {
+            editor.slate.selection = selection = undefined;
+            editor.slate.children = content;
+        }
+    }
     /**
      * Turns a native selection into a slate selection
      */
@@ -124,5 +137,5 @@
     on:compositionend={editor.events.onCompositionEnd}
     on:paste={editor.events.onPaste}
     on:cut={editor.events.onCut}>
-    <Html bind:this={html} types={types} content={$content}></Html>
+    <Html bind:this={html} types={types} content={content}></Html>
 </div>

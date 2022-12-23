@@ -7,7 +7,6 @@ let content:any[] = [];
 
 function randomText() {
     content = generate( { type:'p', mode:'paragraph', num:20 } );
-    console.log( content );
 }
 
 

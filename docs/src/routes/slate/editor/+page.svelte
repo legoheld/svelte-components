@@ -5,12 +5,12 @@
     import { generate } from "../textGenerator";
     import { writable } from 'svelte/store';
     
-    let content = writable([
+    let content = [
         { type:'p', children: [
             { text:"Paragraph " },
             { text:"Demo" }
         ]},
-    ]);
+    ];
 
     let editor = defaultEditor();
     let selection:Selection = undefined;
@@ -21,7 +21,6 @@
     let isOL:boolean = false;
 
     $:{
-        console.log( "Update page selection", selection );
         // change on selection
         let test = selection;
         isBold = editor.isStyleActive( 'bold' );
@@ -32,7 +31,7 @@
 
 
     function randomText() {
-        $content = generate( { type:'p', mode:'paragraph', num:1 } );
+        content = generate( { type:'p', mode:'paragraph', num:1 } );
     }
     
     
