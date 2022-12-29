@@ -16,6 +16,9 @@
         { label:'ModelAPI', children:[
             { path:'/model-api/attribute', label:'Attribute'},
         ] },
+        { label:'Article Editor', children:[
+            { path:'/article/basic', label:'Basic'},
+        ] },
         {
             path:"/image", label:"Image"
         }

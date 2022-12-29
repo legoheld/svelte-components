@@ -14,7 +14,8 @@
     "slate",
     "embed",
     "model-api",
-    "ui/input"
+    "ui/input",
+    "ui/article"
   ],
   "type": "module",
   "devDependencies": {

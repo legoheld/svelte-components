@@ -1,7 +1,7 @@
 {
-  "name": "@lernetz/svelte-input",
+  "name": "@lernetz/svelte-article",
   "version": "1.0.0",
-  "description": "A tailwind ui styled input component.",
+  "description": "An article editor to edit DBModel in a flow",
   "main": "index.ts",
   "scripts": {
     "test": "npx playwright test"
@@ -11,5 +11,8 @@
     "url": "https://gitlab.lernetz.ch/lfw/svelte-components.git"
   },
   "author": "",
+  "dependencies": {
+    "svelte-dnd-action": "^0.9.22"
+  },
   "license": "ISC"
 }
