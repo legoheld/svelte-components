@@ -1,6 +1,6 @@
 .publish:
   stage: deploy
-  image: node:16
+  image: node
   needs: 
     - test
   tags:
@@ -13,7 +13,7 @@ test:
   stage: test
   image: mcr.microsoft.com/playwright:v1.27.0-focal
   script:
-    - npm ci
+    - npm i
     - npm run test
 
 
