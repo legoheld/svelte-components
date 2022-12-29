@@ -22,6 +22,7 @@ test:
       - node_modules
   script:
     - npm i
+    - npm run dev
     - npm run test
 
 
