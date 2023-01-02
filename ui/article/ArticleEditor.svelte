@@ -2,20 +2,22 @@
     import {dndzone} from "svelte-dnd-action";
     import type { DndEvent } from "svelte-dnd-action";
     import { flip } from 'svelte/animate';
+    import { get } from 'svelte/store';
+    import type { DBModel } from "@lernetz/model-api";
 
-    export let elements = [{id:1},{id:2}];
+    export let componentResolve:( element ) => ConstructorOfATypedSvelteComponent;
+    export let elements:DBModel[];
 
-
-    function handler( e:CustomEvent<DndEvent<{id:number}>> ) {
+    function handler( e:CustomEvent<DndEvent<any>> ) {
         elements = e.detail.items;
     }
 
 </script>
 
-<div use:dndzone={ { items:elements } } on:consider={handler} on:finalize={handler}>
-    {#each elements as item(item.id)}
-    <div animate:flip="{{ duration: 200 }}">
-        <div class="handle" aria-label="drag-handle">HANDLE</div>
-        <span class="font-bold">{item.id}</span>this is now a draggable div that can be dropped in other dnd zones</div>
+<div>
+    {#each elements as item ( get(item).id )}
+        <div animate:flip>
+            <svelte:component this={componentResolve(item) } element={item}></svelte:component>
+        </div>
     {/each}
 </div>

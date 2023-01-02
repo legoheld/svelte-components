@@ -8,28 +8,21 @@
     export let model:DBModel = getContext('model');
     export let gateway:ModelGateway = getContext('modelGateway');
 
-    export const value = writable( $model[attribute] );
-
-    // store value into backend when value changes
-    value.subscribe( ( v ) => {
+    
+    function update( v:unknown ) {
 
         // check if value has changed
         let old = $model[attribute];
         if( v == old ) return;
-    
+
         const newAttr = {};
         newAttr[ attribute ] = v;
     
         gateway.update( model, newAttr );
-    })
-
-    // update value when model changes
-    $: {
-        $value = $model[attribute];
     }
 
 
 </script>
 
-<slot {value}></slot>
+<slot update={update}></slot>
 

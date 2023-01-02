@@ -2,7 +2,7 @@
     import type { Descendant, Selection } from "slate";
     import { Element, Range } from "slate";
 
-    import { onMount } from "svelte";
+    import { onMount, createEventDispatcher } from "svelte";
     import { writable } from "svelte/store";
     import type { Writable } from "svelte/store";
     import { types as defaultTypes } from "../html/defaults";
@@ -12,8 +12,12 @@
 
 
     let html:Html;
-    let ref:Node;
+    let ref:HTMLElement;
     let skipNextUpdate:boolean;
+    let dispatcher = createEventDispatcher<{
+        change:{slate:Descendant[],html:string},
+        blur:{slate:Descendant[],html:string},
+    }>();
 
     export let content:Descendant[];
     export let editor:BaseEditor;
@@ -21,15 +25,6 @@
     export let types = defaultTypes;
 
     onMount( () => {
-
-        // keep slate model update with content
-        /*
-        content.subscribe( value => {
-            if( !mute ) editor.slate.selection = undefined;
-            editor.slate.children = value;
-        });
-        */
-
 
         let root = rootNode( ref ) as Document;
         editor.dom = {
@@ -125,6 +120,10 @@
         domSelection.addRange( range );
     }
 
+    function dispatchBlur() {
+        dispatcher( 'blur', { slate:JSON.parse( JSON.stringify( content) ), html:ref.innerHTML } );
+    }
+
   
 
 </script>
@@ -135,6 +134,7 @@
     on:keyup={editor.events.onKeyUp}
     on:keypress={editor.events.onKeyPress}
     on:compositionend={editor.events.onCompositionEnd}
+    on:blur={dispatchBlur}
     on:paste={editor.events.onPaste}
     on:cut={editor.events.onCut}>
     <Html bind:this={html} types={types} content={content}></Html>
