@@ -24,13 +24,13 @@
     };
 
     const presets = {
-        "500px":{ name:"thumb", w:500 },
-        "800px":{ name:"medium", w:800 },
-        "default":{ name:"large", w:1000 }
+        "medium":{ name:"medium", w:800 },
+        "default":{ name:"large" }
     };
 
 
 </script>
 
+<Image alt="test" route={sizeRoute} image={image}></Image>
 <Image alt="test" route={sizeRoute} image={image} sizes={sizes}></Image>
 <Image alt="test" route={presetRoute} image={image} presets={presets}></Image>
