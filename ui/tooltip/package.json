@@ -11,5 +11,8 @@
     "url": "https://gitlab.lernetz.ch/lfw/svelte-components.git"
   },
   "author": "",
-  "license": "ISC"
+  "license": "ISC",
+  "dependencies": {
+    "svelte-transition": "^0.0.7"
+  }
 }

@@ -1,6 +1,8 @@
 <script lang="ts">
 
-    import { onMount, onDestroy } from 'svelte';
+    import { onMount, onDestroy, tick } from 'svelte';
+    import Transition from 'svelte-transition';
+    import { fade,slide } from 'svelte/transition';
 
     export let content:string|ConstructorOfATypedSvelteComponent;
     export let trigger:HTMLElement;
@@ -10,6 +12,7 @@
     export let styling = "bg-black opacity-90 shadow-sm rounded-md text-white z-50 p-8";
 
     let node;
+    let show = false;
 
 
     function getPageBounds( element:HTMLElement ) {
@@ -49,16 +52,20 @@
 	}
 
 
-    onMount( () => {
+    onMount( async () => {
+        show = true;
+        await tick();
         calcPosition();
     })
     
 </script>
 
-<div bind:this={node} class="absolute {styling}">
-    {#if typeof content == 'string'}
-        { content }
-    {:else}
-        <svelte:component this={content}></svelte:component>
-    {/if}
-</div>
+{#if show }
+    <div bind:this={node} class="absolute {styling}" transition:fade={{duration:200, delay:10}}>
+        {#if typeof content == 'string'}
+            { content }
+        {:else}
+            <svelte:component this={content}></svelte:component>
+        {/if}
+    </div>
+{/if}
