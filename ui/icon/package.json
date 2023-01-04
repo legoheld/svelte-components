@@ -1,0 +1,15 @@
+{
+  "name": "@lernetz/svelte-icon",
+  "version": "1.0.0",
+  "description": "A svelte icon component to display svg icons in svelte apps",
+  "main": "index.ts",
+  "scripts": {
+    "test": "npx playwright test"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://gitlab.lernetz.ch/lfw/svelte-components.git"
+  },
+  "author": "",
+  "license": "ISC"
+}
