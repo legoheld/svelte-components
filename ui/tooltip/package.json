@@ -1,0 +1,15 @@
+{
+  "name": "@lernetz/svelte-tooltip",
+  "version": "1.0.0",
+  "description": "A svelte component to display tooltip",
+  "main": "index.ts",
+  "scripts": {
+    "test": "npx playwright test"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://gitlab.lernetz.ch/lfw/svelte-components.git"
+  },
+  "author": "",
+  "license": "ISC"
+}

@@ -16,7 +16,8 @@
     "embed",
     "model-api",
     "ui/input",
-    "ui/article"
+    "ui/article",
+    "ui/tooltip"
   ],
   "type": "module",
   "devDependencies": {
