@@ -58,3 +58,12 @@ embed_publish:
       - embed/package.json
   script:
     - npm -w embed publish
+
+
+ui_tooltip_publish:
+  extends: .publish
+  rules:
+    - changes: 
+      - ui/tooltip/package.json
+  script:
+    - npm -w ui/tooltip publish
