@@ -1,10 +1,14 @@
-<picture>
-    {#each Object.entries( presets ) as [ key, preset ] }
-        {#if key !== "default" }<source media="(max-width: {preset.w}px)" srcset="{route.vars( { preset:preset.name, file_name:image.file_name, ext:image.ext } ).url}">{/if}
-    {/each}
-    <img {alt} bind:this={img}>
-</picture>
+<img {alt} bind:this={img}>
 
+<svelte:window on:resize={updateImage}></svelte:window>
+
+<script lang="ts" context="module">
+    let defaultBreakpoints:any = {}
+
+    export function setDefaultBreakpoints( config:any ) {
+        defaultBreakpoints = config;
+    }
+</script>
 
 <script lang="ts">
 
@@ -12,104 +16,64 @@
     import { onMount } from 'svelte';
 
     export let alt:string = 'image';
-    export let route:RequestBuilder;
+    export let route:RequestBuilder = null;
+    export let vars:any = null;
+    export let breakpoints:any = null;
     export let image:{
         file_name:string,
         name:string,
         width: number,
         height: number,
         ext:string
-    }
-    export let sizes:{ [key:string]: number } = null;
-    export let presets:{ [key:string]: { name:string, w?:number } } = {};
-
+    } = null;
+    export let relativeToParent:boolean = false;
+    
     let img:HTMLImageElement;
-    let ratio:number;
 
     onMount( () => {
-        alt = image.name;
-        ratio = image.height / image.width;
-        setSrcSet();
-        setSizes();
-        setSrc();
-        if( presets ) setSources();
+        alt = image ? image.name : vars.file_name;
+        updateImage();
+        img.addEventListener( 'error', errorHandler );
     });
 
-    function heightAccordingToWidthAndRatio( w:number, r:number ){
-        return Number( w * r ).toFixed();
-    }
+    function updateImage(){
+        let breakpointsToUse = defaultBreakpoints;
+        if( breakpoints ) breakpointsToUse = breakpoints;
+         
+        let config = breakpointsToUse.default;
 
-    function setSizes(){
-        let sizesStr = "";
-        // if( presets ){
-        //     for( const key in presets ){
-        //         if( key !== "default" ){
-        //             sizesStr += `(max-width: ${key}) ${presets[key].w}px,`
-        //         } else {
-        //             sizesStr += `${presets[key].w}px`;
-        //         }
-        //     }
-        //     img.setAttribute( 'sizes', sizesStr );
-        // } else if( sizes ){
-        //     for( const key in sizes ){
-        //         if( key !== "default" ){
-        //             sizesStr += `(max-width: ${key}) ${sizes[key]}px,`
-        //         } else {
-        //             sizesStr += `${sizes[key] }px`;
-        //         }
-        //     }
-        //     img.setAttribute( 'sizes', sizesStr );
+        let sizes = Object.keys( breakpointsToUse ).sort();
+        let compareElement = relativeToParent ? img.parentElement : document.documentElement
 
-        // }
+        sizes.forEach( key => {
+            if( key !== 'default' && compareElement.clientWidth <= Number.parseInt( key )  ){
+                config = breakpointsToUse[key];
+            }
+        });
         
-        if( sizes ){
-            for( const key in sizes ){
-                if( key !== "default" ){
-                    sizesStr += `(max-width: ${key}) ${sizes[key]}px,`
-                } else {
-                    sizesStr += `${sizes[key] }px`;
-                }
-            }
-            img.setAttribute( 'sizes', sizesStr );
-
-        }
-    }
-    
-    function setSrc(){
-        if( Object.keys( presets ).length ){
-            img.setAttribute( 'src', route.vars( { preset:presets.default.name, file_name:image.file_name, ext:image.ext } ).url );
-        } else {
-            let width = sizes ? sizes.default : image.width;
-            img.setAttribute( 'src', route.vars( { width:width, height:heightAccordingToWidthAndRatio( width, ratio ), file_name:image.file_name, ext:image.ext } ).url );
-        }
+        setSrc( config );
+        
     }
 
-    function setSrcSet(){
-        let srcset = "";
-        // if( presets ){
-        //     for( const key in presets ){
-        //         srcset += `${route.vars( { preset:presets[key].name, file_name:image.file_name, ext:image.ext } ).url} ${presets[key].w}w, `;
-        //     }
-        //     img.setAttribute( 'srcset', srcset.substring(0, srcset.length - 2) );
-        // } else if( sizes ){
-        //     for( const key in sizes ){
-        //         srcset += `${route.vars( { width:sizes[key], height:heightAccordingToWidthAndRatio( sizes[key], ratio ), file_name:image.file_name, ext:image.ext } ).url} ${sizes[key]}w, `;
-        //     }
-        //     img.setAttribute( 'srcset', srcset.substring(0, srcset.length - 2) );
-        // }
-        if( sizes ){
-            for( const key in sizes ){
-                srcset += `${route.vars( { width:sizes[key], height:heightAccordingToWidthAndRatio( sizes[key], ratio ), file_name:image.file_name, ext:image.ext } ).url} ${sizes[key]}w, `;
-            }
-            img.setAttribute( 'srcset', srcset.substring(0, srcset.length - 2) );
-        }
+    // function heightAccordingToWidthAndRatio( w:number, r:number ){
+    //     return Number( w * r ).toFixed();
+    // }
 
+    function setSrc( config ){
+        if( config.width && config.height) setWidthAndHeight( config );
+        if( vars && vars.width && vars.height ) setWidthAndHeight( vars );
+        let routeToUse = route ? route : config.route;
+        let url = routeToUse.vars( { ...image, ...config, ...vars } ).url;
+        if( url != img.getAttribute('src') ) img.setAttribute( 'src', url );
     }
 
-    function setSources(){
-
+    function setWidthAndHeight( config ){
+        img.setAttribute( 'width', config.width );
+        img.setAttribute( 'height', config.height );
     }
 
-
+    function errorHandler(){
+        img.setAttribute('src', 'https://placehold.co/600x400?text=Image Error')
+    }
 
 </script>
