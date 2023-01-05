@@ -29,6 +29,7 @@
     export let relativeToParent:boolean = false;
     
     let img:HTMLImageElement;
+    let currentConfig:any;
 
     onMount( () => {
         alt = image ? image.name : vars.file_name;
@@ -40,18 +41,18 @@
         let breakpointsToUse = defaultBreakpoints;
         if( breakpoints ) breakpointsToUse = breakpoints;
          
-        let config = breakpointsToUse.default;
+        currentConfig = breakpointsToUse.default;
 
         let sizes = Object.keys( breakpointsToUse ).sort();
         let compareElement = relativeToParent ? img.parentElement : document.documentElement
 
         sizes.forEach( key => {
             if( key !== 'default' && compareElement.clientWidth <= Number.parseInt( key )  ){
-                config = breakpointsToUse[key];
+                currentConfig = breakpointsToUse[key];
             }
         });
         
-        setSrc( config );
+        setSrc( currentConfig );
         
     }
 
@@ -60,20 +61,31 @@
     // }
 
     function setSrc( config ){
-        if( config.width && config.height) setWidthAndHeight( config );
-        if( vars && vars.width && vars.height ) setWidthAndHeight( vars );
+        let dimensions = getDimensions( config );
+        if( dimensions ) setWidthAndHeight( dimensions )
         let routeToUse = route ? route : config.route;
         let url = routeToUse.vars( { ...image, ...config, ...vars } ).url;
         if( url != img.getAttribute('src') ) img.setAttribute( 'src', url );
     }
 
-    function setWidthAndHeight( config ){
-        img.setAttribute( 'width', config.width );
-        img.setAttribute( 'height', config.height );
+    function setWidthAndHeight( dimensions ){
+        img.setAttribute( 'width', dimensions.width );
+        img.setAttribute( 'height', dimensions.height );
     }
 
     function errorHandler(){
-        img.setAttribute('src', 'https://placehold.co/600x400?text=Image Error')
+        let dimensions = getDimensions( currentConfig );
+        dimensions = dimensions ? dimensions : { width:600, height:400 };
+        img.setAttribute('src', `https://placehold.co/${dimensions.width}x${dimensions.height}?text=Image Error`)
+    }
+    
+    function getDimensions( config ){
+        if( route && vars && vars.width && vars.height ){
+            return { width:vars.width, height:vars.height }
+        } else if ( config.width && config.height ){
+            return { width:config.width, height:config.height };
+        }
+        return undefined;
     }
 
 </script>

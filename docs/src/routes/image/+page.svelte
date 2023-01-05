@@ -61,4 +61,4 @@
 <Image route={staticRoute} vars={{file_name:'636baf36473fb5003d262b98', ext:'jpg', preset:'large'}}></Image>
 <Image image={image} breakpoints={breakpoints}></Image>
 <Image image={image} breakpoints={breakpoints} relativeToParent={true}></Image>
-<Image route={sizeRoute} vars={{file_name:'no-file', ext:'jpg', width:300, height:150}}></Image>
+<Image route={sizeRoute} vars={{file_name:'no-file', ext:'jpg', width:200, height:200}}></Image>
