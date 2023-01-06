@@ -3,11 +3,20 @@
 <svelte:window on:resize={updateImage}></svelte:window>
 
 <script lang="ts" context="module">
-    let defaultBreakpoints:any = {}
+    let defaultBreakpoints:BreakpointConfig = {}
 
     export function setDefaultBreakpoints( config:any ) {
         defaultBreakpoints = config;
-    }
+    };
+
+    export interface BreakpointConfig { [key:string|number]:{
+        route?:RequestBuilder,
+        preset?:string,
+        width?:number,
+        height?:number,
+        aspectRatio?:string
+    }}
+
 </script>
 
 <script lang="ts">
@@ -18,7 +27,7 @@
     export let alt:string = 'image';
     export let route:RequestBuilder = null;
     export let vars:any = null;
-    export let breakpoints:any = null;
+    export let breakpoints:BreakpointConfig = null;
     export let image:{
         file_name:string,
         name:string,
@@ -27,8 +36,11 @@
         ext:string
     } = null;
     export let relativeToParent:boolean = false;
+    export let aspectRatio:string = undefined;
+    
     
     let img:HTMLImageElement;
+    let loadingError:boolean = false;
 
     onMount( () => {
         alt = image ? image.name : vars.file_name;
@@ -37,43 +49,68 @@
     });
 
     function updateImage(){
-        let breakpointsToUse = defaultBreakpoints;
-        if( breakpoints ) breakpointsToUse = breakpoints;
-         
-        let config = breakpointsToUse.default;
+        let breakpoint = calculateBreakpoint();
+        let routeToUse = route ? route : breakpoint.route;
+        setImage( routeToUse.vars( { ...image, ...breakpoint, ...vars } ).url );
+    }
+
+    function calculateBreakpoint(){
+
+        if( route ) return undefined;
+
+        let breakpointsToUse = breakpoints ? breakpoints : defaultBreakpoints;
+        let breakpoint = breakpointsToUse.default;
 
         let sizes = Object.keys( breakpointsToUse ).sort();
         let compareElement = relativeToParent ? img.parentElement : document.documentElement
 
         sizes.forEach( key => {
             if( key !== 'default' && compareElement.clientWidth <= Number.parseInt( key )  ){
-                config = breakpointsToUse[key];
+                breakpoint = breakpointsToUse[key];
             }
         });
-        
-        setSrc( config );
-        
+
+        return breakpoint;
     }
 
-    // function heightAccordingToWidthAndRatio( w:number, r:number ){
-    //     return Number( w * r ).toFixed();
-    // }
+    function calcualteAspectRatio() {
+        if( aspectRatio ) return aspectRatio;
 
-    function setSrc( config ){
-        if( config.width && config.height) setWidthAndHeight( config );
-        if( vars && vars.width && vars.height ) setWidthAndHeight( vars );
-        let routeToUse = route ? route : config.route;
-        let url = routeToUse.vars( { ...image, ...config, ...vars } ).url;
-        if( url != img.getAttribute('src') ) img.setAttribute( 'src', url );
-    }
+        let breakpoint = calculateBreakpoint();
+        if( breakpoint?.aspectRatio ){
+            return breakpoint.aspectRatio;
+        }
 
-    function setWidthAndHeight( config ){
-        img.setAttribute( 'width', config.width );
-        img.setAttribute( 'height', config.height );
+        if( breakpoint?.width && breakpoint?.height ) {
+            return `${breakpoint.width} / ${breakpoint.height}`;
+        }
+        
+        if( image?.width && image?.height ) {
+            return `${image.width} / ${image.height}`;
+        }
+
+        if( vars?.width && vars?.height ){
+            return `${vars.width} / ${vars.height}`;
+        }
+
+        return "4 / 3";
     }
 
     function errorHandler(){
-        img.setAttribute('src', 'https://placehold.co/600x400?text=Image Error')
+        let breakpoint = calculateBreakpoint();
+        let aspectRatio = calcualteAspectRatio();
+        let ratioWidth = aspectRatio.split('/')[0].trim(), ratioHeight = aspectRatio.split('/')[1].trim();
+        let ratio = Number.parseInt(ratioWidth) / Number.parseInt(ratioHeight);
+        let width = breakpoint?.width || image?.width || 300;
+        let height = width / ratio;
+        setImage( `https://placehold.co/${width}x${height}?text=Image Error`);
     }
+    
+    function setImage( url ) {
+        img.style.aspectRatio = calcualteAspectRatio();
+        if( url !== img.getAttribute( 'src' ) ) img.setAttribute('src', url );
+    }
+    
+    
 
 </script>
