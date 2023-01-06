@@ -44,8 +44,8 @@
             route: sizeRoute
         },
         1000:{
-            preset: "medium",
-            route: presetRoute
+            width: 1000,
+            route: sizeRoute
         },
         default:{
             preset: "large",
@@ -57,8 +57,8 @@
 
 </script>
 
-<Image image={image}></Image>
+<Image image={image} ></Image>
 <Image route={staticRoute} vars={{file_name:'636baf36473fb5003d262b98', ext:'jpg', preset:'large'}}></Image>
-<Image image={image} breakpoints={breakpoints}></Image>
+<Image image={image} breakpoints={breakpoints} ></Image>
 <Image image={image} breakpoints={breakpoints} relativeToParent={true}></Image>
-<Image route={sizeRoute} vars={{file_name:'no-file', ext:'jpg', width:200, height:200}}></Image>
+<Image route={sizeRoute} vars={{file_name:'no-file', ext:'jpg', width:100, height:100}} aspectRatio={0.5}></Image> <!-- twicpic -->

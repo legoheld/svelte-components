@@ -27,9 +27,9 @@
         ext:string
     } = null;
     export let relativeToParent:boolean = false;
+    export let aspectRatio:number = undefined;
     
     let img:HTMLImageElement;
-    let currentConfig:any;
 
     onMount( () => {
         alt = image ? image.name : vars.file_name;
@@ -38,54 +38,55 @@
     });
 
     function updateImage(){
-        let breakpointsToUse = defaultBreakpoints;
-        if( breakpoints ) breakpointsToUse = breakpoints;
-         
-        currentConfig = breakpointsToUse.default;
+        let breakpoint = calculateBreakpoint();
+        let routeToUse = route ? route : breakpoint.route;
+        setImage( routeToUse.vars( { ...image, ...breakpoint, ...vars } ).url );
+    }
+
+    function calculateBreakpoint(){
+        let breakpointsToUse = breakpoints ? breakpoints : defaultBreakpoints;
+        let breakpoint = breakpointsToUse.default;
 
         let sizes = Object.keys( breakpointsToUse ).sort();
         let compareElement = relativeToParent ? img.parentElement : document.documentElement
 
         sizes.forEach( key => {
             if( key !== 'default' && compareElement.clientWidth <= Number.parseInt( key )  ){
-                currentConfig = breakpointsToUse[key];
+                breakpoint = breakpointsToUse[key];
             }
         });
-        
-        setSrc( currentConfig );
-        
+
+        return breakpoint;
     }
 
-    // function heightAccordingToWidthAndRatio( w:number, r:number ){
-    //     return Number( w * r ).toFixed();
-    // }
+    function calcualteAspectRatio() {
+        if( aspectRatio ) return aspectRatio;
+        
+        let breakpoint = calculateBreakpoint();
+        if( breakpoint?.width && breakpoint?.height ) {
+            return breakpoint.height / breakpoint.width;
+        }
+        
+        if( image?.width && image?.height ) {
+            return image.height / image.width;
+        }
 
-    function setSrc( config ){
-        let dimensions = getDimensions( config );
-        if( dimensions ) setWidthAndHeight( dimensions )
-        let routeToUse = route ? route : config.route;
-        let url = routeToUse.vars( { ...image, ...config, ...vars } ).url;
-        if( url != img.getAttribute('src') ) img.setAttribute( 'src', url );
-    }
-
-    function setWidthAndHeight( dimensions ){
-        img.setAttribute( 'width', dimensions.width );
-        img.setAttribute( 'height', dimensions.height );
+        return 3/4;
     }
 
     function errorHandler(){
-        let dimensions = getDimensions( currentConfig );
-        dimensions = dimensions ? dimensions : { width:600, height:400 };
-        img.setAttribute('src', `https://placehold.co/${dimensions.width}x${dimensions.height}?text=Image Error`)
+        let breakpoint = calculateBreakpoint();
+        let aspect = calcualteAspectRatio();
+        let width = breakpoint?.width || 600;
+        let height = aspect * width;
+        setImage( 'https://placehold.co/600x400?text=Image Error')
     }
     
-    function getDimensions( config ){
-        if( route && vars && vars.width && vars.height ){
-            return { width:vars.width, height:vars.height }
-        } else if ( config.width && config.height ){
-            return { width:config.width, height:config.height };
-        }
-        return undefined;
+    function setImage( url ) {
+        img.style.aspectRatio = calcualteAspectRatio() + '';
+        img.setAttribute('src', url );
     }
+    
+    
 
 </script>
