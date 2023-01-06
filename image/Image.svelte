@@ -27,7 +27,7 @@
         ext:string
     } = null;
     export let relativeToParent:boolean = false;
-    export let aspectRatio:number = undefined;
+    export let aspectRatio:string = undefined;
     
     let img:HTMLImageElement;
 
@@ -44,6 +44,9 @@
     }
 
     function calculateBreakpoint(){
+
+        if( route ) return undefined;
+
         let breakpointsToUse = breakpoints ? breakpoints : defaultBreakpoints;
         let breakpoint = breakpointsToUse.default;
 
@@ -61,29 +64,39 @@
 
     function calcualteAspectRatio() {
         if( aspectRatio ) return aspectRatio;
-        
+
         let breakpoint = calculateBreakpoint();
+        if( breakpoint?.aspectRatio ){
+            return breakpoint.aspectRatio;
+        }
+
         if( breakpoint?.width && breakpoint?.height ) {
-            return breakpoint.height / breakpoint.width;
+            return `${breakpoint.width} / ${breakpoint.height}`;
         }
         
         if( image?.width && image?.height ) {
-            return image.height / image.width;
+            return `${image.width} / ${image.height}`;
         }
 
-        return 3/4;
+        if( vars?.width && vars?.height ){
+            return `${vars.width} / ${vars.height}`;
+        }
+
+        return "4 / 3";
     }
 
     function errorHandler(){
         let breakpoint = calculateBreakpoint();
-        let aspect = calcualteAspectRatio();
-        let width = breakpoint?.width || 600;
-        let height = aspect * width;
-        setImage( 'https://placehold.co/600x400?text=Image Error')
+        let aspectRatio = calcualteAspectRatio();
+        let ratioWidth = aspectRatio.split('/')[0].trim(), ratioHeight = aspectRatio.split('/')[1].trim();
+        let ratio = Number.parseInt(ratioWidth) / Number.parseInt(ratioHeight);
+        let width = breakpoint?.width || image?.width || 300;
+        let height = width / ratio;
+        setImage( `https://placehold.co/${width}x${height}?text=Image Error`)
     }
     
     function setImage( url ) {
-        img.style.aspectRatio = calcualteAspectRatio() + '';
+        img.style.aspectRatio = calcualteAspectRatio();
         img.setAttribute('src', url );
     }
     

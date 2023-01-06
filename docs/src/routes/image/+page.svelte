@@ -17,23 +17,26 @@
     const image = {
         file_name:'636baf36473fb5003d262b98',
         name:'test.jpg',
-        width: 1456,
-        height: 570,
+        width: 1918,
+        height: 751,
         ext:'jpg'
     }
 
     const breakpoints = {
         600:{
             preset:"thumb",
-            route:presetRoute
+            route:presetRoute,
+            aspectRatio: "1 / 2"
         },
         1000:{
             preset: "medium",
-            route: presetRoute
+            route: presetRoute,
+            aspectRatio: "1 / 1"
         },
         default:{
             preset: "large",
             route: presetRoute,
+            aspectRatio: "2 / 1"
         }
     };
 
@@ -44,12 +47,14 @@
             route: sizeRoute
         },
         1000:{
-            width: 1000,
-            route: sizeRoute
+            preset:"medium",
+            route: presetRoute,
+            aspectRatio: "1 / 1"
         },
         default:{
             preset: "large",
             route: presetRoute,
+            aspectRatio: "2 / 1"
         }
     });
 
@@ -57,8 +62,9 @@
 
 </script>
 
-<Image image={image} ></Image>
-<Image route={staticRoute} vars={{file_name:'636baf36473fb5003d262b98', ext:'jpg', preset:'large'}}></Image>
+<div class="text-24 font-bold">Doku</div>
+<Image image={image}></Image>
+<Image route={staticRoute} vars={{file_name:'636baf36473fb5003d262b98', ext:'jpg', preset:'large'}} aspectRatio={"2 / 1"}></Image>
 <Image image={image} breakpoints={breakpoints} ></Image>
 <Image image={image} breakpoints={breakpoints} relativeToParent={true}></Image>
-<Image route={sizeRoute} vars={{file_name:'no-file', ext:'jpg', width:100, height:100}} aspectRatio={0.5}></Image> <!-- twicpic -->
+<Image route={sizeRoute} vars={{file_name:'no-file', ext:'jpg', width:100, height:100}}></Image>
