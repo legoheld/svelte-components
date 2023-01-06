@@ -3,11 +3,20 @@
 <svelte:window on:resize={updateImage}></svelte:window>
 
 <script lang="ts" context="module">
-    let defaultBreakpoints:any = {}
+    let defaultBreakpoints:BreakpointConfig = {}
 
     export function setDefaultBreakpoints( config:any ) {
         defaultBreakpoints = config;
-    }
+    };
+
+    export interface BreakpointConfig { [key:string|number]:{
+        route?:RequestBuilder,
+        preset?:string,
+        width?:number,
+        height?:number,
+        aspectRatio?:string
+    }}
+
 </script>
 
 <script lang="ts">
@@ -18,7 +27,7 @@
     export let alt:string = 'image';
     export let route:RequestBuilder = null;
     export let vars:any = null;
-    export let breakpoints:any = null;
+    export let breakpoints:BreakpointConfig = null;
     export let image:{
         file_name:string,
         name:string,
@@ -29,7 +38,9 @@
     export let relativeToParent:boolean = false;
     export let aspectRatio:string = undefined;
     
+    
     let img:HTMLImageElement;
+    let loadingError:boolean = false;
 
     onMount( () => {
         alt = image ? image.name : vars.file_name;
@@ -92,12 +103,12 @@
         let ratio = Number.parseInt(ratioWidth) / Number.parseInt(ratioHeight);
         let width = breakpoint?.width || image?.width || 300;
         let height = width / ratio;
-        setImage( `https://placehold.co/${width}x${height}?text=Image Error`)
+        setImage( `https://placehold.co/${width}x${height}?text=Image Error`);
     }
     
     function setImage( url ) {
         img.style.aspectRatio = calcualteAspectRatio();
-        img.setAttribute('src', url );
+        if( url !== img.getAttribute( 'src' ) ) img.setAttribute('src', url );
     }
     
     

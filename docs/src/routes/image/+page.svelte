@@ -59,12 +59,21 @@
     });
 
 
-
 </script>
 
-<div class="text-24 font-bold">Doku</div>
+<div class="text-24 font-bold mb-6">Image Component</div>
+
+<div class="text-24 font-bold mb-6">Image with default breakpoints</div>
 <Image image={image}></Image>
+
+<div class="text-24 font-bold mb-6">Image with fix route and route vars</div>
 <Image route={staticRoute} vars={{file_name:'636baf36473fb5003d262b98', ext:'jpg', preset:'large'}} aspectRatio={"2 / 1"}></Image>
+
+<div class="text-24 font-bold mb-6">Image with own breakpoints</div>
 <Image image={image} breakpoints={breakpoints} ></Image>
+
+<div class="text-24 font-bold mb-6">Image with own breakpoints and size relative to parent element</div>
 <Image image={image} breakpoints={breakpoints} relativeToParent={true}></Image>
+
+<div class="text-24 font-bold mb-6">Image with loading error</div>
 <Image route={sizeRoute} vars={{file_name:'no-file', ext:'jpg', width:100, height:100}}></Image>
