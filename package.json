@@ -17,6 +17,7 @@
     "model-api",
     "ui/input",
     "ui/article",
+    "ui/modals",
     "ui/tooltip"
   ],
   "type": "module",
