@@ -23,6 +23,7 @@
 
     import { RequestBuilder } from '@lernetz/request';
     import { onMount } from 'svelte';
+    import { set, t } from '@lernetz/svelte-translate';
 
     export let alt:string = 'image';
     export let route:RequestBuilder = null;
@@ -42,10 +43,15 @@
     let img:HTMLImageElement;
     let loadingError:boolean = false;
 
+    set( 'de',{
+        'image-error': "Bild nicht gefunden"
+    });
+
     onMount( () => {
         alt = image ? image.name : vars.file_name;
         updateImage();
         img.addEventListener( 'error', errorHandler );
+
     });
 
     function updateImage(){
@@ -88,7 +94,7 @@
         if( image?.width && image?.height ) {
             return `${image.width} / ${image.height}`;
         }
-
+        
         if( vars?.width && vars?.height ){
             return `${vars.width} / ${vars.height}`;
         }
@@ -101,9 +107,9 @@
         let aspectRatio = calcualteAspectRatio();
         let ratioWidth = aspectRatio.split('/')[0].trim(), ratioHeight = aspectRatio.split('/')[1].trim();
         let ratio = Number.parseInt(ratioWidth) / Number.parseInt(ratioHeight);
-        let width = breakpoint?.width || image?.width || 300;
+        let width = vars?.width || breakpoint?.width || image?.width || 300;
         let height = width / ratio;
-        setImage( `https://placehold.co/${width}x${height}?text=Image Error`);
+        setImage( `https://placehold.co/${width}x${height}?text=${$t('image-error')}`);
     }
     
     function setImage( url ) {

@@ -25,7 +25,7 @@ test.describe('Test image', () => {
         await page.goto( '/image' );
 
         const img = await page.getByAltText('636baf36473fb5003d262b98').nth(0);
-        await expect(img).toHaveAttribute('alt', 'test.jpg');
+        await expect(img).toHaveAttribute('alt', '636baf36473fb5003d262b98');
         await expect(img).toHaveAttribute('src', "https://assets.test.b.lernetz.host/svelte-img-test/convert/636baf36473fb5003d262b98.jpg/large.jpg");
 
     });
