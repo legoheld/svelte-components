@@ -2,6 +2,7 @@
     import Image from "@lernetz/svelte-image";
     import { setDefaultBreakpoints } from "@lernetz/svelte-image";
     import { RequestBuilder } from "@lernetz/request";
+    import { set } from '@lernetz/svelte-translate';
 
     const sizeRoute = new RequestBuilder({
         url:"https://assets.test.b.lernetz.host/svelte-img-test/convert/{file_name}.{ext}/o/height={height}&width={width}/responsive.jpg"
@@ -13,7 +14,10 @@
         url:"https://assets.test.b.lernetz.host/svelte-img-test/convert/{file_name}.jpg/large.jpg"
     });
 
-    
+    set( 'de',{
+        'image-error': "Bild nicht gefunden"
+    });
+
     const image = {
         file_name:'636baf36473fb5003d262b98',
         name:'test.jpg',
@@ -64,10 +68,10 @@
 <div class="text-24 font-bold mb-6">Image Component</div>
 
 <div class="text-24 font-bold mb-6">Image with default breakpoints</div>
-<Image image={image}></Image>
+<Image image={image} class="rounded-md"></Image>
 
 <div class="text-24 font-bold mb-6">Image with fix route and route vars</div>
-<Image route={staticRoute} vars={{file_name:'636baf36473fb5003d262b98', ext:'jpg', preset:'large'}} aspectRatio={"2 / 1"}></Image>
+<Image route={staticRoute} vars={{file_name:'636baf36473fb5003d262b98'}} aspectRatio={"2 / 1"}></Image>
 
 <div class="text-24 font-bold mb-6">Image with own breakpoints</div>
 <Image image={image} breakpoints={breakpoints} ></Image>

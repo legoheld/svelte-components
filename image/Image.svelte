@@ -1,4 +1,4 @@
-<img {alt} bind:this={img}>
+<img {alt} bind:this={img} {...$$restProps}>
 
 <svelte:window on:resize={updateImage}></svelte:window>
 
@@ -23,7 +23,7 @@
 
     import { RequestBuilder } from '@lernetz/request';
     import { onMount } from 'svelte';
-    import { set, t } from '@lernetz/svelte-translate';
+    import { t } from '@lernetz/svelte-translate';
 
     export let alt:string = 'image';
     export let route:RequestBuilder = null;
@@ -42,10 +42,6 @@
     
     let img:HTMLImageElement;
     let loadingError:boolean = false;
-
-    set( 'de',{
-        'image-error': "Bild nicht gefunden"
-    });
 
     onMount( () => {
         alt = image ? image.name : vars.file_name;
