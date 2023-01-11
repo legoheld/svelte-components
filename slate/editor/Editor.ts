@@ -1,4 +1,4 @@
-import { createEditor, Descendant, Editor as SlateEditor, Element, Range, Selection } from 'slate';
+import { createEditor, type Descendant, Editor as SlateEditor, Element, Range, type Selection } from 'slate';
 
 export interface DomContract {
     getSelection: () => Range;

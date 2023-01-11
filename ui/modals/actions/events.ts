@@ -1,15 +1,11 @@
-export function clickOutside( node:HTMLElement, fn:() => void ) {
+export function clickOutside( node:HTMLElement, fn:( e:MouseEvent ) => void ) {
 
     function handler( e:MouseEvent ) {
 
         if ((e as PointerEvent).pointerType === '') return // ignore space as click
 
         if (node && !node.contains(e.target as Node)) {
-            if (node.clientWidth) {
-                e.preventDefault()
-                e.stopPropagation()
-                fn();
-            }
+            if (node.clientWidth) fn( e );
         }
     }
 

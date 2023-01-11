@@ -1,9 +1,9 @@
 import { Editor as SlateEditor, Transforms, Range, Element, Node } from "slate";
 import isUrl from 'is-url';
-import { InsertEditor } from "./Insert";
-import { PasteEditor } from "./Paste";
+import type { InsertEditor } from "./Insert";
+import type { PasteEditor } from "./Paste";
+import type { TypeElement } from './Type';
 import { Editor } from '../Editor';
-import { TypeElement } from './Type';
 
 export interface LinkElement extends TypeElement {
     type: string,

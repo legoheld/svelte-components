@@ -19,7 +19,7 @@
 
 <button on:click={adjustName}>Random Name</button>
 <hr>
-<UpdateAttribute {model} gateway={modelGateway} attribute="name" let:update>
+<UpdateAttribute {model} gateway={modelGateway} attribute="name" let:update >
 
     <input value={$model.name} on:blur={e => update( e.currentTarget.value )}>
 

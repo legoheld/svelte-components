@@ -1,8 +1,8 @@
-import { SvelteComponent } from 'svelte';
+import type { SvelteComponent } from 'svelte';
 import Tooltip from './Tooltip.svelte';
 
 interface TooltipOptions {
-	content:string|SvelteComponent,
+	content:string|ConstructorOfATypedSvelteComponent,
 	align?:'left'|'right'|'top'|'bottom',
 	offset?:number;
 	styling?:string;
@@ -18,7 +18,6 @@ export function tooltip( element:HTMLElement, options:TooltipOptions ) {
 	// set default options
 	let op = {
 		align:'top',
-		styling:'bg-black opacity-90 shadow-sm rounded-md text-white z-50 p-8',
 		offset:0,
 		...options
 	};
@@ -31,7 +30,7 @@ export function tooltip( element:HTMLElement, options:TooltipOptions ) {
 				trigger: element,
 				...op
             },
-			target: document.body
+			target: document.body,
         });
 	}
 

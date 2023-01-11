@@ -1,4 +1,4 @@
-import { BaseElement, BaseText } from "slate";
+import type { BaseElement, BaseText } from "slate";
 import { Editor } from "./editor/Editor";
 import { Cut, Delete, Hotkey, Insert, Link, List, Paste, Selection, Style, Type } from "./editor/plugins";
 

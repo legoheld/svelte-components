@@ -1,38 +1,60 @@
-import { get, writable } from 'svelte/store';
-import { unifyDestroy } from './actions/action';
+import { tick } from 'svelte'
+import { get, writable, type Writable } from 'svelte/store';
+import { unify } from './actions/action';
 import { ariaButton, setAttribute, trackAttribute } from './actions/attribute';
 import { listen } from './actions/events';
+import { keydown } from './actions/keys';
 
+interface ModalStore {
+    opened:boolean,
+    id:string
+}
 
-export interface Modal {
+export interface Modal extends Writable<ModalStore> {
     open: () => void,
     close: () => void,
     toggle: () => void,
     button: (node: HTMLElement) => void,
+    autoFocus: (node: HTMLElement) => void,
     trigger: () => HTMLElement,
-    subscribe: () => void,
 }
 
 export function createModal() {
 
-    const store = writable({ opened: false });
+    const store = writable<ModalStore>({ opened: false, id: 'modal-' + ( 1000 * Math.random() ).toFixed() });
+    const { set, update, subscribe } = store;
+
     let trigger:HTMLElement;
 
-    const open = () => store.set({ opened: true });
-    const close = () => store.set({ opened: false });
-    const toggle = () => store.set({ opened: !get(store).opened });
+    const open = () => update( s => ({ ...s, opened: true }) );
+    const close = () => update( s => ({ ...s, opened: false }) );
+    const toggle = () => update( s => ({ ...s, opened: !s.opened }) );
 
 
     function button(node: HTMLElement) {
 
         trigger = node;
 
-        return unifyDestroy([
-            setAttribute( node, { role:'button', type:'button', 'aria-haspopup':'true' } ),
+        return unify([
+            setAttribute( node, { role:'button', type:'button', 'aria-haspopup':'true', 'aria-controls':get( store ).id } ),
             trackAttribute( node, { attribute: 'aria-expanded', store, value:(s) => s.opened + '' }),
-            listen(node, 'mouseover', open),
-            listen(node, 'mouseleave', close)
+            listen(node, 'click', (e) => {
+                e.preventDefault();
+                e.stopPropagation();
+                console.log("click toggle")
+                toggle();
+                
+                
+            }, true ),
+            keydown( node, ( e:KeyboardEvent ) => {
+                if( e.key == 'Escape' ) close();
+            })
         ]);
+    }
+
+    async function autoFocus(node:HTMLElement) {
+        await tick();
+        if( get( store ).opened ) node.focus();
     }
 
 
@@ -41,8 +63,11 @@ export function createModal() {
         close,
         toggle,
         button,
+        autoFocus,
         trigger:() => trigger,
-        subscribe: store.subscribe
+        subscribe,
+        set,
+        update,
     }
 
 }

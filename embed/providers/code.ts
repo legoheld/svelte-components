@@ -1,4 +1,4 @@
-import { IFrameOptions, Provider } from "../embed";
+import type { IFrameOptions, Provider } from "../embed";
 
 /**
  * Returns iframe options from <iframe ....> code

@@ -9,13 +9,13 @@
 
     const editor = defaultEditor();
     export let element:Writable<{
-    modelName: string,
-    id: string;
-    text: {
-        slate:Descendant[],
-        html:string
-    }
-}>;
+        modelName: string,
+        id: string;
+        content: {
+            slate:Descendant[],
+            html:string
+        }
+    }>;
 </script>
 
 
@@ -27,7 +27,7 @@
 
     <svelte:fragment slot="content">
         <UpdateAttribute attribute='text' model={element} let:update>
-            <Editor {editor} content={$element.text.slate} on:blur={ e => update( e.detail )}></Editor>
+            <Editor {editor} content={$element.content.slate} on:change={ e => update( e.detail )}></Editor>
         </UpdateAttribute>
     </svelte:fragment>
 </Element>

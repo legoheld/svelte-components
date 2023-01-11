@@ -1,6 +1,6 @@
 import isHotkey from "is-hotkey";
 import { Editor as SlateEditor, Text, Transforms } from "slate";
-import { TypeEditor } from "./Type";
+import type { TypeEditor } from "./Type";
 import { Editor } from "../Editor";
 
 

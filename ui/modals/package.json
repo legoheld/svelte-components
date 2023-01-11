@@ -13,6 +13,6 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "svelte-transition": "^0.0.7"
+    "svelte-transition-classes": "^0.1.1"
   }
 }

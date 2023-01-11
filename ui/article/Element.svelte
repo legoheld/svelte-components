@@ -14,7 +14,6 @@
             <slot name="content">
                 <div>Content</div>
             </slot>
-
         </div>
     </div>
 </div>

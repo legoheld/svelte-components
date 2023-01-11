@@ -1,4 +1,4 @@
-import { Editor as SlateEditor, Element, Transforms, BaseElement } from "slate";
+import { Editor as SlateEditor, Element, Transforms, type BaseElement } from "slate";
 import { Editor } from "../Editor";
 
 export interface TypeElement extends BaseElement {

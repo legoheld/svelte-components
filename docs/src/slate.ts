@@ -1,3 +1,4 @@
+/*
 import { TypeElement, LinkElement, TextElement } from '@lernetz/svelte-slate/defaults';
 
 declare module 'slate' {
@@ -6,3 +7,4 @@ declare module 'slate' {
         Text: TextElement;
     }
 }
+*/

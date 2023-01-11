@@ -16,7 +16,6 @@
     let skipNextUpdate:boolean;
     let dispatcher = createEventDispatcher<{
         change:{slate:Descendant[],html:string},
-        blur:{slate:Descendant[],html:string},
     }>();
 
     export let content:Descendant[];
@@ -35,7 +34,7 @@
                 // to break the next update in the `$: {}` expression we will flag 
                 // otherwise it will set selection to undefined, that should only be happen when setting content from outside!
                 skipNextUpdate = true;
-                content = c;
+                content = JSON.parse( JSON.stringify( c ) );
             },
             updateSelection: (s) => {
                 selection = s;
@@ -59,7 +58,7 @@
             skipNextUpdate = false;
         } else {
             editor.slate.selection = selection = undefined;
-            editor.slate.children = content;
+            editor.slate.children = JSON.parse( JSON.stringify( content ) );
         }
     }
     /**
@@ -120,8 +119,8 @@
         domSelection.addRange( range );
     }
 
-    function dispatchBlur() {
-        dispatcher( 'blur', { slate:JSON.parse( JSON.stringify( content) ), html:ref.innerHTML } );
+    function dispatchChange() {
+        dispatcher( 'change', { slate:content, html:ref.innerHTML } );
     }
 
   
@@ -134,7 +133,7 @@
     on:keyup={editor.events.onKeyUp}
     on:keypress={editor.events.onKeyPress}
     on:compositionend={editor.events.onCompositionEnd}
-    on:blur={dispatchBlur}
+    on:blur={dispatchChange}
     on:paste={editor.events.onPaste}
     on:cut={editor.events.onCut}>
     <Html bind:this={html} types={types} content={content}></Html>

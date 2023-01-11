@@ -1,4 +1,4 @@
-import { IFrameOptions, Provider } from "../embed";
+import type { IFrameOptions, Provider } from "../embed";
 import { code, optionalMatch } from "./code";
 
 /**

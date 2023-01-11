@@ -5,7 +5,7 @@
     import { get } from 'svelte/store';
     import type { DBModel } from "@lernetz/model-api";
 
-    export let componentResolve:( element ) => ConstructorOfATypedSvelteComponent;
+    export let componentResolve:( element:DBModel ) => ConstructorOfATypedSvelteComponent;
     export let elements:DBModel[];
 
     function handler( e:CustomEvent<DndEvent<any>> ) {

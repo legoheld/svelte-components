@@ -31,5 +31,5 @@
 
 <button use:tooltip={{
     content:"Other styling",
-    styling: 'bg-blue-500 opacity-90 shadow-lg rounded-md text-white z-50 p-24 border border-blue-900'
+    styling: 'bg-blue-500/80 shadow-lg rounded-md text-white z-50 p-24 border border-blue-900'
 }}>My custom style</button>

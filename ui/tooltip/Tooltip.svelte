@@ -9,11 +9,9 @@
     export let align:'left'|'right'|'top'|'bottom' = 'top';
     export let offset = 0;
 
-    export let styling = "bg-black opacity-90 shadow-sm rounded-md text-white z-50 p-8";
+    export let styling = "bg-black shadow-sm rounded-md text-white z-50 p-8";
 
     let node;
-    let show = false;
-
 
     function getPageBounds( element:HTMLElement ) {
         let rect = element.getBoundingClientRect();
@@ -53,19 +51,24 @@
 
 
     onMount( async () => {
-        show = true;
         await tick();
         calcPosition();
     })
     
 </script>
 
-{#if show }
-    <div bind:this={node} class="absolute {styling}" transition:fade={{duration:200, delay:10}}>
+<Transition
+    appear={true}
+    show={true}
+    enter="transition ease-out duration-300 pointer-events-none"
+    enterTo="opacity-100"
+    enterFrom="opacity-0"
+>
+    <div bind:this={node} class="absolute {styling}">
         {#if typeof content == 'string'}
             { content }
         {:else}
             <svelte:component this={content}></svelte:component>
         {/if}
     </div>
-{/if}
+</Transition>
