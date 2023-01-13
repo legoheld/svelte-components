@@ -1,12 +1,12 @@
 <script lang="ts">
     import { onMount, tick } from 'svelte';
     import { fade, scale, fly } from 'svelte/transition';
-    import type { Modal } from "../modal";
+    import type { Overlay } from "../overlay";
     import { clickOutside } from '../actions/events';
     import { place, placeTransform, type AlignModes } from '../actions/place';
     import classes from 'svelte-transition-classes';
 
-    export let modal:Modal;
+    export let overlay:Overlay;
 
     export let align:AlignModes = 'Top';
 
@@ -29,18 +29,18 @@
 
     onMount( async() => {
         await tick();
-        place( node, { align, reference:modal.trigger() });
+        place( node, { align, reference:overlay.reference() });
     })
 
     function onOutside( e:MouseEvent ) {
-        // only close modal when click is not on trigger that toggles
-        if( !modal.trigger().contains( e.target as Node ) ) modal.close();
+        // only close overlay when click is not on trigger that toggles
+        if( !overlay.reference().contains( e.target as Node ) ) overlay.close();
     }
 
 </script>
 
-{#if $modal.opened}
-<div class="absolute z-50 " id={$modal.id} bind:this={node}
+{#if $overlay.opened}
+<div class="absolute z-50 " id={$overlay.id} bind:this={node}
     use:clickOutside={onOutside} 
     >
     <div class="{ origin[align] } transition duration-200 ease-out"

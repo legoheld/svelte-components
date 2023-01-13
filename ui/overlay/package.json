@@ -1,7 +1,7 @@
 {
-  "name": "@lernetz/svelte-modals",
+  "name": "@lernetz/svelte-overlay",
   "version": "1.0.0",
-  "description": "A svelte component to display panel on button click",
+  "description": "A collection of components that show overlays like DropDowns, Lightboxes, Menus etc",
   "main": "index.ts",
   "scripts": {
     "test": "npx playwright test"

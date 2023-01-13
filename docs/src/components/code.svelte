@@ -1,0 +1,1 @@
+<span class="font-mono bg-slate-300 py-4 px-6 text-12"><slot></slot></span>

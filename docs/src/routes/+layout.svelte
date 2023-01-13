@@ -13,7 +13,10 @@
         { label:'UI', children:[
             { path:'/ui/input', label:'Input'},
             { path:'/ui/tooltip', label:'Tooltip'},
-            { path:'/ui/dropdown', label:'DropDown'},
+            { label:'Overlays', children: [
+                { path:'/ui/overlay/dropdown', label:'DropDown'},
+                { path:'/ui/overlay/lightbox', label:'Lightbox'}
+            ]},
         ] },
         { label:'ModelAPI', children:[
             { path:'/model-api/attribute', label:'Attribute'},

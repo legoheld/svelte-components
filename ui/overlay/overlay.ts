@@ -5,66 +5,57 @@ import { ariaButton, setAttribute, trackAttribute } from './actions/attribute';
 import { listen } from './actions/events';
 import { keydown } from './actions/keys';
 
-interface ModalStore {
+interface OverlayStore {
     opened:boolean,
     id:string
 }
 
-export interface Modal extends Writable<ModalStore> {
+export interface Overlay extends Writable<OverlayStore> {
     open: () => void,
     close: () => void,
     toggle: () => void,
-    button: (node: HTMLElement) => void,
-    autoFocus: (node: HTMLElement) => void,
-    trigger: () => HTMLElement,
+    trigger: (node: HTMLElement) => void,
+    reference: () => HTMLElement,
 }
 
-export function createModal() {
+export function createOverlay() {
 
-    const store = writable<ModalStore>({ opened: false, id: 'modal-' + ( 1000 * Math.random() ).toFixed() });
+    const store = writable<OverlayStore>({ opened: false, id: 'overlay-' + ( 1000 * Math.random() ).toFixed() });
     const { set, update, subscribe } = store;
 
-    let trigger:HTMLElement;
+    let reference:HTMLElement;
 
     const open = () => update( s => ({ ...s, opened: true }) );
     const close = () => update( s => ({ ...s, opened: false }) );
     const toggle = () => update( s => ({ ...s, opened: !s.opened }) );
 
 
-    function button(node: HTMLElement) {
+    function trigger(node: HTMLElement) {
 
-        trigger = node;
+        reference = node;
 
         return unify([
             setAttribute( node, { role:'button', type:'button', 'aria-haspopup':'true', 'aria-controls':get( store ).id } ),
             trackAttribute( node, { attribute: 'aria-expanded', store, value:(s) => s.opened + '' }),
             listen(node, 'click', (e) => {
-                e.preventDefault();
-                e.stopPropagation();
-                console.log("click toggle")
+                //e.preventDefault();
+                //e.stopPropagation();
                 toggle();
-                
-                
-            }, true ),
+            } ),
             keydown( node, ( e:KeyboardEvent ) => {
                 if( e.key == 'Escape' ) close();
             })
         ]);
     }
 
-    async function autoFocus(node:HTMLElement) {
-        await tick();
-        if( get( store ).opened ) node.focus();
-    }
 
 
     return {
         open,
         close,
         toggle,
-        button,
-        autoFocus,
-        trigger:() => trigger,
+        trigger,
+        reference:() => reference,
         subscribe,
         set,
         update,

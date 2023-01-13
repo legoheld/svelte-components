@@ -5,6 +5,7 @@ export const ArrowLeft = 'ArrowLeft'
 export const ArrowUp = 'ArrowUp'
 export const ArrowRight = 'ArrowRight'
 export const ArrowDown = 'ArrowDown'
+export const Enter = 'Enter'
 
 
 

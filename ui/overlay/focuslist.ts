@@ -11,7 +11,7 @@ interface FocusListStore {
     items:Array<HTMLElement>,
 }
 
-export interface Menu extends Writable< FocusListStore > {
+export interface FocusList extends Writable< FocusListStore > {
     item:( node:HTMLElement ) => void,
     next:() => void,
     prev:() => void,
@@ -19,7 +19,7 @@ export interface Menu extends Writable< FocusListStore > {
 }
 
 
-export function createFocuslist() {
+export function createFocusList() {
 
     const { set, update, subscribe } = writable<FocusListStore>({ active: undefined, items:[] });
 
